@@ -39,18 +39,18 @@ const Hero = () => {
         </div>
 
         {/** cta buttons */}
-              <div className="flex flex-wrap justify-center items-center gap-4 w-full max-w-md mx-auto lg:mt-6 [@media(max-width:400px)]:flex-col">
+              <div className="flex flex-wrap justify-center items-center gap-4 w-full max-w-md mx-auto lg:mt-6 [@media(max-width:410px)]:flex-col">
                   <Button
                       text="Get Started"
                       variant="primary"
-                      className="flex-1 [@media(max-width:400px)]:w-full"
+                      className="flex-1 [@media(max-width:410px)]:w-full"
                       onClick={() => setShowSignUp(true)}
                   />
                   <Button
                       text="Watch Video"
                       variant="ghost"
                       icon={<PlayIcon size={14} />}
-                      className="flex-1 [@media(max-width:400px)]:w-full"
+                      className="flex-1 [@media(max-width:410px)]:w-full"
                   />
               </div>
       </div>
