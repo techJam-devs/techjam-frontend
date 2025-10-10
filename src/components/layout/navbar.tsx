@@ -1,15 +1,20 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import SearchBar from "../common/searchBar";
-import SignUpModal from "../common/signUpModal";
-import SignInModal from "../common/signInModal";
+import SignUpModal from "../authModals/signUpModal";
+import SignInModal from "../authModals/signInModal";
 import Button from "../common/Button";
 import MobileMenu from "../common/MobileMenu";
 
 const Navbar = () => {
-  const [show, setShow] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-
+  const [openModal, setOpenModal] = useState<"signin" | "signup" | null>(null);
+  useEffect(() => {
+    if (openModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [openModal]);
   const navlink = [
     { title: "Home", link: "/" },
     { title: "About Us", link: "/about-us" },
@@ -35,9 +40,20 @@ const Navbar = () => {
             {navlink.map((n) => (
               <li
                 key={n.title}
-                className="text-sm text-gray-700 hover:text-blue transition-colors"
+                className="text-sm text-gray-700 font-medium hover:text-blue transition-colors"
               >
-                <Link to={n.link}>{n.title}</Link>
+                <NavLink
+                  to={n.link}
+                  className={({ isActive }) =>
+                    `text-sm transition-colors duration-200 ${
+                      isActive
+                        ? "text-black font-semibold"
+                        : "text-gray-700 hover:text-blue"
+                    }`
+                  }
+                >
+                  {n.title}
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -51,13 +67,13 @@ const Navbar = () => {
             variant="ghost"
             size="sm"
             className="border-none"
-            onClick={() => setShow(true)}
+            onClick={() => setOpenModal("signin")}
           />
           <Button
             text="Get Started"
             variant="primary"
             size="sm"
-            onClick={() => setShowSignUp(true)}
+            onClick={() => setOpenModal("signup")}
           />
         </div>
 
@@ -67,11 +83,19 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/**  auth modal pop up */}
-      <SignInModal isOpen={show} onClose={() => setShow(false)} />
+      {/* Sign In Modal */}
+      <SignInModal
+        isOpen={openModal === "signin"}
+        onClose={() => setOpenModal(null)}
+        onSwitchToSignUp={() => setOpenModal("signup")}
+      />
 
-      {/** sign up */}
-      <SignUpModal isOpen={showSignUp} onClose={() => setShowSignUp(false)} />
+      {/* Sign Up Modal */}
+      <SignUpModal
+        isOpen={openModal === "signup"}
+        onClose={() => setOpenModal(null)}
+        onSwitchToSignIn={() => setOpenModal("signin")}
+      />
     </header>
   );
 };

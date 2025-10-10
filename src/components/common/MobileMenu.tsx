@@ -2,16 +2,25 @@
  * @description Navabar mobile menu
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MenuIcon, X } from "lucide-react";
 import SearchBar from "./searchBar";
-import SignInModal from "./signInModal";
+import SignInModal from "../authModals/signInModal";
+import SignUpModal from "../authModals/signUpModal";
 import Button from "./Button";
 
 const MobileMenu = () => {
   const [show, setShow] = useState(false);
-  const [signIn, setSignIn] = useState(false);
+  const [openModal, setOpenModal] = useState<"signin" | "signup" | null>(null);
+
+   useEffect(() => {
+     if (openModal) {
+       document.body.style.overflow = "hidden";
+     } else {
+       document.body.style.overflow = "";
+     }
+   }, [openModal]);
 
   const navlink = [
     { title: "Home", link: "/" },
@@ -79,13 +88,24 @@ const MobileMenu = () => {
             variant="ghost"
             className="border-none"
             size="lg"
-            onClick={() => setSignIn(true)}
+            onClick={() => setOpenModal("signin")}
           />
         </div>
       )}
 
-      {/** sign in modal */}
-      <SignInModal isOpen={signIn} onClose={() => setSignIn(false)} />
+      {/* Sign In Modal */}
+      <SignInModal
+        isOpen={openModal === "signin"}
+        onClose={() => setOpenModal(null)}
+        onSwitchToSignUp={() => setOpenModal("signup")}
+      />
+
+      {/* Sign Up Modal */}
+      <SignUpModal
+        isOpen={openModal === "signup"}
+        onClose={() => setOpenModal(null)}
+        onSwitchToSignIn={() => setOpenModal("signin")}
+      />
     </>
   );
 };

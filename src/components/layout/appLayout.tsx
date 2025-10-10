@@ -10,7 +10,7 @@ const appLayout: React.FC<appLayout> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <main className="mt-[2rem]">{children}</main>
+      <main className="mt-[3rem]">{children}</main>
       <Footer />
     </div>
   );
