@@ -2,23 +2,22 @@
  * @returns component for hero section
  */
 
-import { useEffect, useState } from "react";
 import { PlayIcon } from "lucide-react";
 import Button from "../common/Button";
-import SignUpModal from "../authModals/signUpModal";
-import SignInModal from "../authModals/signInModal";
+import Modal from "../authModals/AuthModal";
+import { useState } from "react";
+
+type AuthPortal =
+  | "signIn"
+  | "signUp"
+  | "verifyEmail"
+  | "forgetPassword"
+  | "resetPassword";
 
 const Hero = () => {
-  const [openModal, setOpenModal] = useState<"signin" | "signup" | null>(null);
+  // controls modal visibility
+  const [showModal, setShowModal] = useState<AuthPortal | null>(null);
 
-   useEffect(() => {
-     if (openModal) {
-       document.body.style.overflow = "hidden";
-     } else {
-       document.body.style.overflow = "";
-     }
-   }, [openModal]);
-   
   return (
     <section className="py-16 px-4">
       <div className="max-w-7xl mx-auto flex flex-col justify-center items-center gap-5">
@@ -50,7 +49,7 @@ const Hero = () => {
             text="Get Started"
             variant="primary"
             className="flex-1 [@media(max-width:410px)]:w-full"
-            onClick={() => setOpenModal("signin")}
+            onClick={() => setShowModal("signUp")}
           />
           <Button
             text="Watch Video"
@@ -61,18 +60,12 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Sign In Modal */}
-      <SignInModal
-        isOpen={openModal === "signin"}
-        onClose={() => setOpenModal(null)}
-        onSwitchToSignUp={() => setOpenModal("signup")}
-      />
-
-      {/* Sign Up Modal */}
-      <SignUpModal
-        isOpen={openModal === "signup"}
-        onClose={() => setOpenModal(null)}
-        onSwitchToSignIn={() => setOpenModal("signin")}
+      {/** open the auth modal */}
+      <Modal
+        isOpen={!!showModal}
+        onClose={() => setShowModal(null)}
+        switchPortal={showModal || "signUp"}
+        onSwitch={setShowModal}
       />
     </section>
   );
