@@ -1,27 +1,35 @@
 /**
- * @description Navabar mobile menu
+ * @description Navbar mobile menu
  */
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MenuIcon, X } from "lucide-react";
 import SearchBar from "./searchBar";
-import SignInModal from "../authModals/signInModal";
-import SignUpModal from "../authModals/signUpModal";
 import Button from "./Button";
+import Modal from "../authModals/AuthModal";
+
+type AuthPortal =
+  | "signIn"
+  | "signUp"
+  | "verifyEmail"
+  | "forgetPassword"
+  | "resetPassword";
 
 const MobileMenu = () => {
   const [show, setShow] = useState(false);
-  const [openModal, setOpenModal] = useState<"signin" | "signup" | null>(null);
+  const [openModal, setOpenModal] = useState<AuthPortal | null>(null);
 
-   useEffect(() => {
-     if (openModal) {
-       document.body.style.overflow = "hidden";
-     } else {
-       document.body.style.overflow = "";
-     }
-   }, [openModal]);
+  // prevent modal overflow
+  useEffect(() => {
+    if (openModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [openModal]);
 
+  // nav links
   const navlink = [
     { title: "Home", link: "/" },
     { title: "About Us", link: "/about-us" },
@@ -88,23 +96,17 @@ const MobileMenu = () => {
             variant="ghost"
             className="border-none"
             size="lg"
-            onClick={() => setOpenModal("signin")}
+            onClick={() => setOpenModal("signIn")}
           />
         </div>
       )}
 
-      {/* Sign In Modal */}
-      <SignInModal
-        isOpen={openModal === "signin"}
+      {/** Open Modal */}
+      <Modal
+        isOpen={!!openModal}
         onClose={() => setOpenModal(null)}
-        onSwitchToSignUp={() => setOpenModal("signup")}
-      />
-
-      {/* Sign Up Modal */}
-      <SignUpModal
-        isOpen={openModal === "signup"}
-        onClose={() => setOpenModal(null)}
-        onSwitchToSignIn={() => setOpenModal("signin")}
+        switchPortal={openModal || "signIn"}
+        onSwitch={setOpenModal}
       />
     </>
   );

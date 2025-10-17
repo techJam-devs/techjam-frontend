@@ -1,20 +1,30 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import SearchBar from "../common/searchBar";
-import SignUpModal from "../authModals/signUpModal";
-import SignInModal from "../authModals/signInModal";
 import Button from "../common/Button";
 import MobileMenu from "../common/MobileMenu";
+import Modal from "../authModals/AuthModal";
+
+type AuthPortal =
+  | "signIn"
+  | "signUp"
+  | "verifyEmail"
+  | "forgetPassword"
+  | "resetPassword";
 
 const Navbar = () => {
-  const [openModal, setOpenModal] = useState<"signin" | "signup" | null>(null);
+  const [openModal, setOpenModal] = useState<AuthPortal | null>(null);
+
+  // prevent overflow
   useEffect(() => {
     if (openModal) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = openModal ? "hidden" : "";
     } else {
       document.body.style.overflow = "";
     }
   }, [openModal]);
+
+  //nav links
   const navlink = [
     { title: "Home", link: "/" },
     { title: "About Us", link: "/about-us" },
@@ -60,20 +70,22 @@ const Navbar = () => {
           <SearchBar />
         </div>
 
-        {/* CTA buttons */}
+        {/* CTA buttons  login + sign up*/}
         <div className="hidden lg:flex items-center gap-3 py-1">
           <Button
             text="Log in"
             variant="ghost"
             size="sm"
             className="border-none"
-            onClick={() => setOpenModal("signin")}
+            onClick={() => setOpenModal("signIn")}
           />
+
+          {/** sign up button */}
           <Button
             text="Get Started"
             variant="primary"
             size="sm"
-            onClick={() => setOpenModal("signup")}
+            onClick={() => setOpenModal("signUp")}
           />
         </div>
 
@@ -83,18 +95,12 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Sign In Modal */}
-      <SignInModal
-        isOpen={openModal === "signin"}
+      {/** Modal */}
+      <Modal
+        isOpen={!!openModal}
         onClose={() => setOpenModal(null)}
-        onSwitchToSignUp={() => setOpenModal("signup")}
-      />
-
-      {/* Sign Up Modal */}
-      <SignUpModal
-        isOpen={openModal === "signup"}
-        onClose={() => setOpenModal(null)}
-        onSwitchToSignIn={() => setOpenModal("signin")}
+        switchPortal={openModal ?? "signIn"}
+        onSwitch={setOpenModal}
       />
     </header>
   );
