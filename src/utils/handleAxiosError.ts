@@ -21,7 +21,7 @@ const handleAxiosError = (error: unknown): Error => {
   if (error instanceof AxiosError) {
     if (!error.response) {
       return new Error(
-        "Server currently unavailable please Check your internet connection. ",
+        "Server currently unavailable, please check your internet connection. ",
       );
     }
 

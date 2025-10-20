@@ -9,13 +9,15 @@ import SignInModal from "./signInModal";
 import ForgetPasswordModal from "./forgetPasswordModal";
 import VerifyEmailModal from "./verifyEmailModal";
 import { useEffect } from "react";
+import ProceedModal from "./proceedModal";
 
 type AuthPortal =
   | "signIn"
   | "signUp"
   | "verifyEmail"
   | "forgetPassword"
-  | "resetPassword";
+  | "resetPassword"
+  | "proceed";
 
 interface ModalProps {
   isOpen: boolean;
@@ -41,6 +43,18 @@ const Modal: React.FC<ModalProps> = ({
       }
     }
   }, [isOpen, onSwitch]);
+
+  // centralized overflow control
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
   const modalRoot = document.getElementById("modal-root");
   if (!modalRoot) return null;
 
@@ -77,6 +91,7 @@ const Modal: React.FC<ModalProps> = ({
               {switchPortal === "verifyEmail" && (
                 <VerifyEmailModal onSwitch={onSwitch} />
               )}
+              {switchPortal === "proceed" && <ProceedModal />}
             </Motion.div>
           </Motion.div>
         </AnimatePresence>,

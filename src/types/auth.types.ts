@@ -4,8 +4,8 @@
 
 // login request
 export interface LoginRequest {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 // login response

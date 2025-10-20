@@ -8,4 +8,5 @@ export type AuthPortal =
   | "signUp"
   | "forgetPassword"
   | "resetPassword"
-  | "verifyPassword";
+  | "verifyEmail"
+  | "proceed";

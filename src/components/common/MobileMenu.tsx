@@ -2,32 +2,17 @@
  * @description Navbar mobile menu
  */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { MenuIcon, X } from "lucide-react";
 import SearchBar from "./searchBar";
 import Button from "./Button";
 import Modal from "../authModals/AuthModal";
-
-type AuthPortal =
-  | "signIn"
-  | "signUp"
-  | "verifyEmail"
-  | "forgetPassword"
-  | "resetPassword";
+import type { AuthPortal } from "../../types/authModel.types";
 
 const MobileMenu = () => {
   const [show, setShow] = useState(false);
   const [openModal, setOpenModal] = useState<AuthPortal | null>(null);
-
-  // prevent modal overflow
-  useEffect(() => {
-    if (openModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [openModal]);
 
   // nav links
   const navlink = [

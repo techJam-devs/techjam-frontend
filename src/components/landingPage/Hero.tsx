@@ -6,20 +6,14 @@ import { PlayIcon } from "lucide-react";
 import Button from "../common/Button";
 import Modal from "../authModals/AuthModal";
 import { useState } from "react";
-
-type AuthPortal =
-  | "signIn"
-  | "signUp"
-  | "verifyEmail"
-  | "forgetPassword"
-  | "resetPassword";
+import type { AuthPortal } from "../../types/authModel.types";
 
 const Hero = () => {
   // controls modal visibility
   const [showModal, setShowModal] = useState<AuthPortal | null>(null);
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-10 px-4">
       <div className="max-w-7xl mx-auto flex flex-col justify-center items-center gap-5">
         {/** text + description */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold text-center px-4">

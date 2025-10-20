@@ -8,7 +8,7 @@ import FormWrapper from "../common/FormWrapper";
 import React, { useState, useRef } from "react";
 
 interface VerifyModalProps {
-  onSwitch?: (portal: "signIn") => void;
+  onSwitch?: (portal: "proceed") => void;
 }
 
 const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
@@ -57,7 +57,7 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
     console.log("Verification Code:", code);
     localStorage.removeItem("pendingVerification");
     localStorage.removeItem("pendingEmail");
-    onSwitch?.("signIn"); // back to sign in
+    onSwitch?.("proceed"); // navigate to profile dashboard
 
     // send `code` to backend for verification
   };

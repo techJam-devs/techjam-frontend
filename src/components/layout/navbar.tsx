@@ -1,28 +1,27 @@
-import { useState, useEffect } from "react";
+/**
+ * @description Nav bar for our app
+ */
+
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import SearchBar from "../common/searchBar";
 import Button from "../common/Button";
 import MobileMenu from "../common/MobileMenu";
 import Modal from "../authModals/AuthModal";
-
-type AuthPortal =
-  | "signIn"
-  | "signUp"
-  | "verifyEmail"
-  | "forgetPassword"
-  | "resetPassword";
+import type { AuthPortal } from "../../types/authModel.types";
 
 const Navbar = () => {
   const [openModal, setOpenModal] = useState<AuthPortal | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
-  // prevent overflow
   useEffect(() => {
-    if (openModal) {
-      document.body.style.overflow = openModal ? "hidden" : "";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [openModal]);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50); // trigger after 50px scroll
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   //nav links
   const navlink = [
@@ -33,7 +32,9 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="fixed top-0 w-full z-50">
+    <header
+      className={`fixed top-0 w-full bg-gray-50 z-50 ${scrolled ? "bg-blue border-b-2 border-gray-200 shadow-sm" : " border-b-0"}`}
+    >
       <nav className="relative container mx-auto flex items-center justify-between px-4 lg:px-8 py-2">
         {/* Logo */}
         <div className="flex items-center">
