@@ -99,7 +99,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
                 onClick={() => onSwitch?.("forgetPassword")}
                 className="text-md text-blue leading-light cursor-pointer hover:underline"
               >
-                Forget password?
+                Forgot password?
               </p>
             </div>
 

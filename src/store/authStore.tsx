@@ -39,7 +39,7 @@ const useAuthstore = create<AuthState>((set) => ({
     const { RegisterHook } = authHook();
     try {
       const res = await RegisterHook(formData);
-      set({ user: res });
+      set({ user: res.data });
     } catch (error) {
       if (error instanceof Error) {
         set({ error: error.message });

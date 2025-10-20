@@ -77,7 +77,7 @@ const ForgetPasswordModal: React.FC<ForgetPasswordProps> = ({ onSwitch }) => {
             Account Recovery
           </h2>
           <p className="text-sm text-gray-100 max-w-sm">
-            Let's have a email to help you recover your account
+            Enter your email address to help us recover your account.
           </p>
         </div>
       </div>
