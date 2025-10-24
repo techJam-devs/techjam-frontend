@@ -4,6 +4,7 @@
 @theme {
   --color-blue: #0908c3;
   --color-mute-gray: #a3a3a3;
+  --color-border-color: #d1d5db;
 }
 
 button,

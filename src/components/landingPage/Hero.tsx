@@ -13,7 +13,7 @@ const Hero = () => {
   const [showModal, setShowModal] = useState<AuthPortal | null>(null);
 
   return (
-    <section className="py-10 px-4">
+    <section className="py-10 px-4 mt-[3rem]">
       <div className="max-w-7xl mx-auto flex flex-col justify-center items-center gap-5">
         {/** text + description */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold text-center px-4">

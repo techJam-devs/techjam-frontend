@@ -4,28 +4,28 @@
 
 const testimonials = [
   {
-    name: "Debbie Willhite",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    name: "Sarah Johnson",
+    text: "This platform completely transformed how I manage my projects. The interface is intuitive, and I can easily track progress across multiple teams. Highly recommended!",
     active: false,
   },
   {
-    name: "Debbie Willhite",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    name: "Michael Adeyemi",
+    text: "I love how smooth and fast the dashboard feels. From task creation to completion tracking, everything works seamlessly. It’s definitely made my workflow more efficient.",
     active: true,
   },
   {
-    name: "Debbie Willhite",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    name: "Chloe Martinez",
+    text: "As a designer, I appreciate the clean layout and thoughtful user experience. It’s rare to find a tool that’s both powerful and pleasant to use every day.",
     active: false,
   },
   {
-    name: "Debbie Willhite",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    name: "David Kim",
+    text: "The collaboration features have been a game changer for my team. We can communicate, assign tasks, and monitor progress all in one place. Great job!",
     active: false,
   },
   {
-    name: "Debbie Willhite",
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+    name: "Emily Thompson",
+    text: "I’ve tried several dashboard tools before, but none come close to this one. The attention to detail, performance, and simplicity are unmatched.",
     active: false,
   },
 ];

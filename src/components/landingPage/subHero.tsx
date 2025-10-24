@@ -81,13 +81,13 @@ const SubHero = () => {
                 name: "Jennifer Louis",
                 time: "1 day ago",
                 text: "Project reviewed and has been sent to tim214@gmail.com for approval.",
-                img: "/subhero/Ellipse.png",
+                img: "https://randomuser.me/api/portraits/women/76.jpg",
               },
               {
                 name: "Matthew Jonas",
                 time: "4h ago",
                 text: "Project reviewed and has been sent to tim214@gmail.com for approval.",
-                img: "/subhero/Ellipse.png",
+                img: "https://randomuser.me/api/portraits/men/58.jpg",
               },
             ].map((user, i) => (
               <div key={i} className="flex gap-3">
