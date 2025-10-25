@@ -1,3 +1,7 @@
+/**
+ * @description About component
+ */
+
 const AboutUs = () => {
   return <div>AboutUs</div>;
 };
