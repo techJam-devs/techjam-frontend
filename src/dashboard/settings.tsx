@@ -1,5 +1,5 @@
 /**
- * @description Seetings / Profile page for our dashboard
+ * @description Settings / Profile page for our dashboard
  */
 
 const Settings = () => {

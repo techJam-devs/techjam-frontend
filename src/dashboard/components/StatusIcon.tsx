@@ -1,5 +1,5 @@
 /**
- *
+ *@description This component shows a colored status dot, a "Status" label, and a dropdown arrow.
  */
 
 import { ChevronDown } from "lucide-react";

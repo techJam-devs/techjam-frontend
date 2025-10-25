@@ -72,7 +72,7 @@ const DashNavigator = () => {
                 {/* Dropdown */}
                 {openDropdown && (
                   <ul className="absolute top-full left-0 mt-2 w-40 rounded-lg shadow-md border border-border-color bg-white text-sm z-50">
-                    {["all", "in-Progress", "Completed", "Cancelled"].map(
+                    {["all", "in-progress", "Completed", "Cancelled"].map(
                       (status) => {
                         const Icon =
                           status === "Completed"

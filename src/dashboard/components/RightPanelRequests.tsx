@@ -62,7 +62,7 @@ const RequestPanel = () => {
               </div>
 
               {/* Right: Actions */}
-              <div className="flex items-end justify-end gap-3 w-12 mt-3 :mt-5">
+              <div className="flex items-end justify-end gap-3 w-12 mt-3">
                 <button className="cursor-pointer bg-red-100 text-red-500 rounded-full hover:bg-red-600 hover:text-white transition">
                   <X className="size-4" />
                 </button>

@@ -14,6 +14,7 @@ export default function ProjectMembers() {
       <div className="flex -space-x-3">
         {members.map((member) => (
           <img
+            key={member.id}
             src={member.image}
             alt={member.name}
             className="w-8 h-8 border-2 border-white rounded-full"
