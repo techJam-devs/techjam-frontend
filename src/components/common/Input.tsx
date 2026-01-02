@@ -44,7 +44,7 @@ const Input: React.FC<InputProps> = ({
           value={value}
           onChange={onChange}
           autoComplete={autoComplete}
-          className="w-full bg-gray-100 p-3 pr-10 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-200"
+          className="w-full bg-gray-100 p-3 pr-10 rounded-md focus:outline-none text-xs focus:ring-1 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-200"
         />
 
         {/* Eye Icon (visible only for password type) */}

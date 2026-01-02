@@ -18,7 +18,10 @@ const SubHero = () => {
       "
       >
         {/* Left side - Profile grid */}
-        <div className="flex justify-center md:justify-start">
+        <div
+          className="flex justify-center md:justify-start"
+          data-aos="fade-up"
+        >
           <div
             className="
             inline-block 
@@ -38,12 +41,23 @@ const SubHero = () => {
 
         {/* Middle - Text + Avatars + stats */}
         <div className="flex flex-col items-center justify-center text-center lg:text-left md:mt-20">
-          <h3 className="text-lg xl:ml-auto text-gray-500">
+          <h3
+            className="text-lg xl:ml-auto text-gray-500"
+            data-aos="fade-down"
+            data-aos-delay="200"
+          >
             {" "}
             Build your profile
           </h3>
           <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2">
-            <p className="text-gray-500 text-lg"> With real life projects</p>
+            <p
+              className="text-gray-500 text-lg"
+              data-aos="fade-down"
+              data-aos-delay="500"
+            >
+              {" "}
+              With real life projects
+            </p>
             <img
               src="/subhero/signature.svg"
               alt=""
@@ -53,7 +67,7 @@ const SubHero = () => {
 
           {/* 8 million users */}
           <div className="flex justify-center lg:justify-start items-center gap-4 mt-8">
-            <div className="flex -space-x-3">
+            <div className="flex -space-x-3" data-aos="fade-down">
               {[1, 2, 3, 4, 5].map((num) => (
                 <img
                   key={num}
@@ -64,7 +78,10 @@ const SubHero = () => {
               ))}
             </div>
             <div>
-              <p className="font-semibold text-gray-800 text-xl md:text-2xl">
+              <p
+                className="font-semibold text-gray-800 text-xl md:text-2xl"
+                data-aos="zoom-out"
+              >
                 8.2M
               </p>
               <p className="text-sm text-gray-500">Active users</p>
@@ -73,7 +90,10 @@ const SubHero = () => {
         </div>
 
         {/* Right side - Activity card */}
-        <div className="bg-blue-50 rounded-2xl p-5 md:p-6 shadow-md w-full max-w-sm mx-auto lg:mx-0">
+        <div
+          className="bg-blue-50 rounded-2xl p-5 md:p-6 shadow-md w-full max-w-sm mx-auto lg:mx-0"
+          data-aos="fade-right"
+        >
           <h4 className="font-semibold text-gray-800 mb-6 text-lg">Activity</h4>
           <div className="space-y-6">
             {[

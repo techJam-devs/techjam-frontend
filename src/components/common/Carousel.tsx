@@ -29,10 +29,10 @@ const AuthCarousel: React.FC<CarouselProps> = ({ slides, interval = 4000 }) => {
   const { icon, title, subtitle } = slides[current];
 
   return (
-    <div className="flex flex-col items-center justify-center text-center space-y-4 p-6 w-full">
-      <div className="text-blue text-4xl">{icon}</div>
-      <h2 className="font-bold text-lg md:text-2xl text-gray-100">{title}</h2>
-      <p className="text-sm text-gray-100 max-w-sm">{subtitle}</p>
+    <div className="flex flex-col items-center justify-center text-center space-y-4 p-4 w-full">
+      <div className="text-blue">{icon}</div>
+      <h2 className="font-bold text-xl text-gray-100">{title}</h2>
+      <p className="text-xs text-gray-100 max-w-sm">{subtitle}</p>
 
       {/* Dots indicator */}
       <div className="flex justify-center mt-6 gap-2">

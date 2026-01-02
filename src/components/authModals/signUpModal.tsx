@@ -9,9 +9,8 @@ import Button from "../common/Button";
 import Carousel from "../common/Carousel";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
-// import authAxios from "../../utils/authAxios";
 import { Code2, Lock, Twitter } from "lucide-react";
-
+import useAuthstore from "../../store/authStore";
 interface SignUpModalProps {
   onSwitch?: (portal: "signIn" | "signUp" | "verifyEmail") => void;
 }
@@ -35,25 +34,39 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
     },
   ];
 
+  const { register, error, clearError } = useAuthstore();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    acceptTerms: false,
   });
 
-  /** Handle submit */
+  // Handle data input
+  const handleDataInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearError();
+    const { name, type, value, checked } = e.target;
+    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
+  };
+
+  // Handle submit
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // save current modal state to local storage
-    localStorage.setItem("pendingVerification", "true");
-    localStorage.setItem("pendingEmail", formData.email);
-    onSwitch?.("verifyEmail");
-    // try {
-    //   const res = await authAxios.post("/register", formData);
-    //   console.log(res.data?.message);
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    setLoading(true);
+
+    try {
+      await register(formData);
+      // After successful registration, proceed to verification
+      localStorage.setItem("pendingVerification", "true");
+      localStorage.setItem("pendingEmail", formData.email);
+      onSwitch?.("verifyEmail");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,13 +77,26 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
           title="Get Started"
           subtitle="Get started with your journey by creating a new account."
         >
-          <form onSubmit={handleSubmit} className="space-y-5 mt-8">
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            {error && (
+              <p className="text-xs text-red-500 bg-red-100 p-2 border-l rounded-sm text-start">
+                {error}
+              </p>
+            )}
+            <Input
+              type="text"
+              name="name"
+              placeholder="Full name"
+              value={formData.name}
+              onChange={handleDataInput}
+              autoComplete="name"
+            />
             <Input
               type="email"
               name="email"
               placeholder="Email"
               value={formData.email}
-              onChange={(e) =>
+              onChange={(e): void =>
                 setFormData({ ...formData, [e.target.name]: e.target.value })
               }
               autoComplete="email"
@@ -80,9 +106,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
               name="password"
               placeholder="Create Password"
               value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, [e.target.name]: e.target.value })
-              }
+              onChange={handleDataInput}
               autoComplete="new-password"
             />
             <Input
@@ -90,41 +114,52 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
-              onChange={(e) =>
-                setFormData({ ...formData, [e.target.name]: e.target.value })
-              }
+              onChange={handleDataInput}
               autoComplete="new-password"
             />
 
             {/* Agree to terms */}
-            <div className="flex justify-between items-center mb-10">
-              <label htmlFor="terms" className="hover:underline text-sm">
-                <input type="checkbox" id="terms" /> I agree to the{" "}
+            <div className="flex items-center gap-2 mb-10">
+              <input
+                type="checkbox"
+                name="acceptTerms"
+                id="acceptTerms"
+                checked={formData.acceptTerms}
+                onChange={handleDataInput}
+              />
+
+              <label htmlFor="acceptTerms" className="text-xs cursor-pointer">
+                I agree to the{" "}
                 <span className="text-blue">Terms and Conditions</span>
               </label>
             </div>
 
             {/* Button */}
-            <Button type="submit" text="Sign up" className="w-full" />
+            <Button
+              disabled={loading}
+              type="submit"
+              text={loading ? "Signing up... ⌛" : "Sign up"}
+              className="w-full"
+            />
           </form>
         </FormWrapper>
 
         {/* Social Auth */}
         <div className="text-center space-y-5 mt-6">
-          <p className="text-md">Or sign up with</p>
+          <p className="text-sm">Or sign up with</p>
           <div className="flex justify-center items-center gap-8">
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FcGoogle />
+              <FcGoogle size={20} />
             </span>
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FaApple />
+              <FaApple size={20} />
             </span>
           </div>
         </div>
 
         {/* Switch to Sign In */}
         <div className="text-center text-gray-600 mt-5 text-base md:text-md">
-          <p>
+          <p className="text-sm">
             Already have an account?{" "}
             <span
               className="text-blue cursor-pointer hover:underline"

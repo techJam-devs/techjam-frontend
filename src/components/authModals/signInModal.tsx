@@ -10,8 +10,10 @@ import Carousel from "../common/Carousel";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { Code2, Globe, Twitter } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-import authAxios from "../../utils/authAxios";
+import useAuthStore from "../../store/authStore";
+import useToastStore from "../../store/notificationStore";
 
 type AuthPortal =
   | "signIn"
@@ -44,19 +46,40 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
       subtitle: "Join thousands of developers sharing knowledge and resources.",
     },
   ];
-
+  const { addToast } = useToastStore();
+  const navigate = useNavigate();
+  const { error, login, clearError } = useAuthStore();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    rememberMe: false,
   });
+
+  const { email, password } = formData;
+  const payload = { email, password };
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearError();
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
 
   /** Handle submit */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const res = await authAxios.post("/login", formData);
-    console.log(res.data?.message);
-    console.log(formData);
+    setLoading(true);
+    try {
+      await login(payload);
+      addToast({ message: "Authentication successful!", type: "success" });
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -69,14 +92,17 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
           subtitle="Login an existing account with your correct details"
         >
           <form onSubmit={handleSubmit} className="space-y-7 mt-8">
+            {error && (
+              <p className="text-xs text-red-500 bg-red-100 p-2 border-l rounded-sm text-start">
+                {error}
+              </p>
+            )}
             <Input
               type="email"
               name="email"
               placeholder="Email"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, [e.target.name]: e.target.value })
-              }
+              onChange={handleInput}
               autoComplete="email"
             />
             <Input
@@ -84,20 +110,31 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
               name="password"
               placeholder="Password"
               value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, [e.target.name]: e.target.value })
-              }
+              onChange={handleInput}
               autoComplete="current-password"
             />
-            {/** Remember me + forget password */}
-            <div className="flex justify-between items-center mb-10">
-              <label htmlFor="remember me">
-                {" "}
-                <input type="checkbox" name="remember me" /> Remember me
-              </label>
+            {/** Remember me + forgot password */}
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleInput}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                <label
+                  htmlFor="rememberMe"
+                  className="cursor-pointer select-none text-xs"
+                >
+                  Remember me
+                </label>
+              </div>
+
               <p
                 onClick={() => onSwitch?.("forgetPassword")}
-                className="text-md text-blue leading-light cursor-pointer hover:underline"
+                className="text-xs text-blue cursor-pointer hover:underline"
               >
                 Forgot password?
               </p>
@@ -105,28 +142,33 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
 
             {/** button */}
             <div className="w-full">
-              <Button type="submit" text="Sign In" className="w-full" />
+              <Button
+                type="submit"
+                text={loading ? "Authenticating...⌛" : "Sign In"}
+                disabled={loading}
+                className="w-full"
+              />
             </div>
           </form>
         </FormWrapper>
 
         {/** signin with google + apple */}
         <div className="mt-6 text-center space-y-5">
-          <p className="text-md"> Or sign In with </p>
+          <p className="text-sm"> Or sign In with </p>
           <div className="flex justify-center items-center gap-8">
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
               {" "}
-              <FcGoogle />{" "}
+              <FcGoogle size={20} />{" "}
             </span>
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FaApple />
+              <FaApple size={20} />
             </span>
           </div>
         </div>
 
         {/* Switch to Sign Up */}
         <div className="text-center text-gray-600 mt-5 text-base md:text-md">
-          <p>
+          <p className="text-sm">
             Don't have an account?{" "}
             <span
               className="text-blue cursor-pointer hover:underline"

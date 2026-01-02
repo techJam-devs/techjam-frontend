@@ -26,7 +26,11 @@ const Newsletter = () => {
       </div>
       {/** center div */}
       <div className="mx-auto max-w-6xl">
-        <h2 className="text-center md:text-start text-2xl md:text-4xl font-semibold">
+        <h2
+          className="text-center md:text-start text-2xl md:text-4xl font-semibold"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
           Subscribe to
           <br />— Our Newsletter
         </h2>
@@ -34,7 +38,11 @@ const Newsletter = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-10 px-6">
           {/* Left Side - Text Content */}
           <div>
-            <p className="text-center md:text-start text-gray-600 text-lg max-w-md">
+            <p
+              className="text-center md:text-start text-gray-600 text-lg max-w-md"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            >
               Get weekly updates about our community on your email, no spam
               guaranteed we promise 👋
             </p>
