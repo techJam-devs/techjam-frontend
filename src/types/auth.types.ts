@@ -10,13 +10,10 @@ export interface LoginRequest {
 
 // login response
 export interface LoginResponse {
-  statusCode: number;
   success: boolean;
   message: string;
   data?: unknown | null;
   error?: {
-    statusCode: number;
-    error: string;
     message: string;
   };
 }
@@ -30,17 +27,26 @@ export interface RegisterRequest {
 
 // register response
 export interface RegisterResponse {
-  statusCode: number;
   success: boolean;
   message: string;
-  data?: {
-    message?: string;
-    email?: string;
-    otpExpiryMinutes?: number;
-  } | null;
+  data?: unknown | null;
   error?: {
     message?: string;
-    error?: string;
-    statusCode?: number;
+  } | null;
+}
+
+// resend OTP request
+export interface ResendOtpRequest {
+  email: string;
+}
+
+// resend OTP response
+export interface ResendOtpResponse {
+  success: boolean;
+  message: string;
+  data?: unknown | null;
+  error?: {
+    success: boolean;
+    message: string;
   } | null;
 }

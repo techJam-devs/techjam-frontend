@@ -15,16 +15,26 @@ const GetStarted = () => {
     <section className="flex flex-col lg:flex-row max-w-6xl mx-auto py-20 px-4 justify-between items-center gap-4">
       {/** text */}
       <div className="lg:w-4xl">
-        <h3 className="text-center lg:text-start text-lg md:text-2xl leading-loose">
+        <h3
+          className="text-center lg:text-start text-lg md:text-2xl leading-loose"
+          data-aos="fade-down"
+        >
           Get Started
         </h3>
-        <p className="text-center lg:text-start font-semibold text-3xl md:text-4xl tracking-normal">
+        <p
+          className="text-center lg:text-start font-semibold text-3xl md:text-4xl tracking-normal"
+          data-aos="fade-right"
+        >
           {" "}
           Ready to start building real - <br /> world experience?
         </p>
       </div>
       {/** button */}
-      <div className="flex items-center justify-center w-full  mt-6">
+      <div
+        className="flex items-center justify-center w-full  mt-6"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
         <Button
           onClick={() => setOpenModal("signUp")}
           text="Get Started"

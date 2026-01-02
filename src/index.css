@@ -6,6 +6,10 @@
   --color-mute-gray: #a3a3a3;
   --color-border-color: #d1d5db;
 }
+body,
+#root {
+  overflow-x: hidden;
+}
 
 button,
 a {
@@ -26,4 +30,19 @@ a {
 
 .animate-fade-in {
   animation: fade-in 0.25s ease-out;
+}
+
+@keyframes notification-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }

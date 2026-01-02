@@ -6,7 +6,7 @@ import axios from "axios";
 
 const authAxios = axios.create({
   baseURL: import.meta.env.VITE_AUTH_API_URL,
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 export default authAxios;

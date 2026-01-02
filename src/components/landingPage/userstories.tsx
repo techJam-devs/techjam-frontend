@@ -43,7 +43,10 @@ const Userstories = () => {
       }}
       className="py-20 text-white border-t border-gray-500"
     >
-      <h1 className="text-2xl md:text-3xl font-semibold mb-14 md:mb-20 text-center">
+      <h1
+        className="text-2xl md:text-3xl font-semibold mb-14 md:mb-20 text-center"
+        data-aos="fade-up"
+      >
         {" "}
         User stories
       </h1>
@@ -52,9 +55,16 @@ const Userstories = () => {
         <div className="flex flex-col items-start gap-6">
           <h2 className="text-2xl">
             From our <br />{" "}
-            <span className="font-bold text-4xl"> community</span>
+            <span
+              className="font-bold text-4xl"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              {" "}
+              community
+            </span>
           </h2>
-          <p className="text-base md:text-lg">
+          <p className="text-base md:text-lg" data-aos="fade-up">
             Here is what other subscribers are saying about projects from
             TechJam
           </p>
@@ -78,7 +88,9 @@ const Userstories = () => {
 
         {/* Right side - Active user story */}
         <div className="flex flex-col items-center text-center p-8">
-          <p className="italic md:text-lg mb-8">{stories[index].story}</p>
+          <p className="italic md:text-lg mb-8" data-aos="fade-up">
+            {stories[index].story}
+          </p>
           <div className="flex items-center justify-center gap-4">
             <img
               src={stories[index].img}
@@ -86,7 +98,11 @@ const Userstories = () => {
               className="h-16 w-16 rounded-full border object-cover"
             />
             <div className="text-left">
-              <p className="font-semibold text-gray-900">
+              <p
+                className="font-semibold text-gray-900"
+                data-aos="fade-up"
+                data-aos-delay="200"
+              >
                 {stories[index].name}
               </p>
               <span className="text-gray-500 text-sm">

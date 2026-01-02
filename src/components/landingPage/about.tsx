@@ -6,8 +6,13 @@ const About = () => {
   return (
     <section className="py-16">
       <div className="max-w-2xl mx-auto p-4 text-center space-y-8">
-        <h1 className="text-2xl md:text-3xl font-semibold">About Us</h1>
-        <p className="text-base md:text-lg leading-relaxed">
+        <h1 className="text-2xl md:text-3xl font-semibold" data-aos="fade-in">
+          About Us
+        </h1>
+        <p
+          className="text-base md:text-lg leading-relaxed"
+          data-aos="fade-left"
+        >
           TechJam is the platform for tech beginners to gain hands-on experience
           by working on real-world projects in design, development, product
           management and many more.{" "}

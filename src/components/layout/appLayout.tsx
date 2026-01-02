@@ -17,7 +17,7 @@ const AppLayout: React.FC<appLayout> = ({ children }) => {
     location.pathname.startsWith(path),
   );
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {!hideNav && <Navbar />}
       <main>{children}</main>
       {!hideNav && <Footer />}

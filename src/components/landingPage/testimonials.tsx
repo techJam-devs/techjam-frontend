@@ -34,7 +34,10 @@ const Testimonials = () => {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-6xl mx-auto text-center">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-20">
+        <h2
+          className="text-2xl md:text-3xl font-semibold mb-20"
+          data-aos="fade-down"
+        >
           Testimonials
         </h2>
 
@@ -42,6 +45,8 @@ const Testimonials = () => {
           {testimonials.map((t, i) => (
             <div
               key={i}
+              data-aos="fade-up"
+              data-aos-delay={i * 150}
               className={`w-72 md:w-80 p-6 rounded-2xl shadow-md transition-transform duration-300 ${
                 t.active
                   ? "bg-blue-600 text-white rotate-0 scale-105"

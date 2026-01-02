@@ -49,7 +49,7 @@ const ForgetPasswordModal: React.FC<ForgetPasswordProps> = ({ onSwitch }) => {
 
         {/* Switch to Sign Up */}
         <div className="text-center text-gray-600 mt-20 text-base md:text-md">
-          <p>
+          <p className="text-sm">
             Remember Password?{" "}
             <span
               className="text-blue cursor-pointer hover:underline"

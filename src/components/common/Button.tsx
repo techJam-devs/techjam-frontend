@@ -12,6 +12,7 @@ interface ButtonProps {
   variant?: "primary" | "ghost";
   icon?: React.ReactNode;
   size?: "sm" | "md" | "lg";
+  disabled?: boolean;
 }
 
 const sizes = {
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
   variant = "primary",
   icon,
   size = "md",
+  disabled = false,
 }) => {
   const variants = {
     primary: "bg-blue text-white hover:bg-blue-700",
@@ -37,11 +39,14 @@ const Button: React.FC<ButtonProps> = ({
   const baseStyles =
     "inline-flex items-center justify-center gap-2 rounded-full font-medium shadow-md transition-all duration-300";
 
+  const disabledStyles = "opacity-50 cursor-not-allowed";
+
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]}  ${className || ""}`}
+      disabled={disabled}
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? disabledStyles : ""} ${className || ""}`}
     >
       {icon && <span className="text-sm">{icon}</span>} {text}
     </button>

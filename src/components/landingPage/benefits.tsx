@@ -7,14 +7,20 @@ const BenefitsSection = () => {
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-6 text-center">
         {/* Title */}
-        <h2 className="text-2xl md:text-3xl font-semibold text-[#0f0f0f] mb-14">
+        <h2
+          className="text-2xl md:text-3xl font-semibold text-[#0f0f0f] mb-14"
+          data-aos="zoom-out"
+        >
           Discover Our Benefits
         </h2>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card 1 */}
-          <div className="bg-[#ECF2FF] rounded-2xl px-10 pt-10 flex flex-col justify-between items-center text-left">
+          <div
+            className="bg-[#ECF2FF] rounded-2xl px-10 pt-10 flex flex-col justify-between items-center text-left"
+            data-aos="fade-up"
+          >
             <div>
               <h3 className="text-lg font-semibold text-[#0f0f0f] mb-4">
                 Build your portfolio
@@ -38,7 +44,11 @@ const BenefitsSection = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-[#ECF2FF] rounded-2xl p-10 flex flex-col justify-between items-center text-left">
+          <div
+            className="bg-[#ECF2FF] rounded-2xl p-10 flex flex-col justify-between items-center text-left"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
             <div>
               <h3 className="text-lg font-semibold text-[#0f0f0f] mb-4">
                 Collaborate
@@ -61,7 +71,11 @@ const BenefitsSection = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="bg-[#ECF2FF] rounded-2xl p-10 flex flex-col justify-between items-center text-left">
+          <div
+            className="bg-[#ECF2FF] rounded-2xl p-10 flex flex-col justify-between items-center text-left"
+            data-aos="fade-up"
+            data-aos-delay="400"
+          >
             <div>
               <h3 className="text-lg font-semibold text-[#0f0f0f] mb-4">
                 Safe space for newbies
@@ -81,7 +95,11 @@ const BenefitsSection = () => {
           </div>
 
           {/* Card 4 */}
-          <div className="bg-[#ECF2FF] rounded-2xl p-10 flex flex-col justify-center items-center gap-3">
+          <div
+            className="bg-[#ECF2FF] rounded-2xl p-10 flex flex-col justify-center items-center gap-3"
+            data-aos="fade-up"
+            data-aos-delay="400"
+          >
             {[
               "Personalize Matching",
               "Expand your network",

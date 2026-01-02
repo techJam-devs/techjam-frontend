@@ -6,6 +6,7 @@ import { UserCheck } from "lucide-react";
 import Button from "../common/Button";
 import FormWrapper from "../common/FormWrapper";
 import React, { useState, useRef } from "react";
+import { ResendOtpService } from "../../services/authServices";
 
 interface VerifyModalProps {
   onSwitch?: (portal: "proceed") => void;
@@ -36,6 +37,19 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
   ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      const res = await ResendOtpService(email as string);
+      if (res.success) {
+        setTimeLeft(45);
+      } else {
+        console.error("Failed to resend OTP:", res.message);
+      }
+    } catch (err) {
+      console.error("Error resending OTP:", err);
     }
   };
 
@@ -106,10 +120,7 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
                     {" "}
                     Didn't get Code? {""}
                     <span
-                      onClick={() => {
-                        console.log("Resend code");
-                        setTimeLeft(45);
-                      }}
+                      onClick={handleResendOtp}
                       className="text-red-400 cursor-pointer hover:underline font-medium"
                     >
                       Resend Code

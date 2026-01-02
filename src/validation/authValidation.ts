@@ -46,7 +46,7 @@ export const RegisterSchema = joi.object({
     .string()
     .pattern(
       new RegExp(
-        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_])[A-Za-z\\d@$!%*?&_]{8,}$",
       ),
     )
     .min(8)
@@ -61,5 +61,9 @@ export const RegisterSchema = joi.object({
     "any.only": "Passwords do not match",
     "string.empty": "Confirm password is required",
     "any.required": "Confirm password is required",
+  }),
+  acceptTerms: joi.boolean().valid(true).required().messages({
+    "any.only": "You must accept the Terms and Conditions",
+    "any.required": "You must accept the Terms and Conditions",
   }),
 });

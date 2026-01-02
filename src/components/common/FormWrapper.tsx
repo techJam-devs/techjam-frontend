@@ -15,11 +15,9 @@ const FormWrapper: React.FC<FormProps> = ({ title, subtitle, children }) => {
     <div className="w-full max-w-md mx-auto text-center space-y-6">
       {/* Title */}
       <div>
-        <h1 className="font-bold text-xl md:text-2xl text-gray-900">{title}</h1>
+        <h1 className="font-bold text-lg text-gray-900">{title}</h1>
         {subtitle && (
-          <p className="text-mute-gray text-sm md:text-base mt-1 px-4">
-            {subtitle}
-          </p>
+          <p className="text-mute-gray text-sm mt-1 px-4">{subtitle}</p>
         )}
       </div>
 

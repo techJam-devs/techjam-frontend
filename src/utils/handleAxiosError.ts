@@ -1,45 +1,44 @@
-/**
- * Handles Axios and non-Axios errors gracefully
- * and returns a clean Error object with a readable message.
- */
-
-import { AxiosError } from "axios";
+import axios from "axios";
 
 interface BackendError {
-  statusCode?: number;
-  message?: string;
   success?: boolean;
-  data?: unknown | null;
-  error?: {
-    message?: string;
-    error?: string;
-    statusCode?: number;
-  } | null;
+  message?: string;
+  errors?: { msg: string }[]; // For validation errors
+  error?: { message?: string } | null;
 }
 
 const handleAxiosError = (error: unknown): Error => {
-  if (error instanceof AxiosError) {
+  if (axios.isAxiosError(error)) {
+    // Network-level error
     if (!error.response) {
       return new Error(
-        "Server currently unavailable, please check your internet connection. ",
+        "Server currently unavailable. Please check your internet connection.",
       );
     }
 
     const status = error.response.status;
     const data = error.response.data as BackendError;
 
-    const errMessage =
+    const message =
       data?.error?.message ||
       data?.message ||
-      data?.error?.error ||
+      (data?.errors?.length
+        ? data.errors.map((e) => e.msg).join(", ")
+        : null) ||
       (status >= 500
-        ? "Server error please try again later."
+        ? "Server error. Please try again later."
         : "Request failed. Please check your input.");
 
-    return new Error(errMessage);
+    const err = new Error(message) as Error & { status?: number };
+    err.status = status;
+
+    return err;
   }
 
-  return new Error("An unknown error has occurred.");
+  // Regular JS error
+  if (error instanceof Error) return error;
+
+  return new Error("An unexpected error occurred.");
 };
 
 export default handleAxiosError;

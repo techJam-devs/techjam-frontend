@@ -20,12 +20,15 @@ const HowItWorks = () => {
       }}
       className="py-20 bg-gradient-to-b from-gray-50  via-bg-gray-900  to-blue"
     >
-      <h2 className="text-2xl md:text-3xl font-semibold mb-14 md:mb-20 text-center">
+      <h2
+        className="text-2xl md:text-3xl font-semibold mb-14 md:mb-20 text-center"
+        data-aos="zoom-in"
+      >
         How does it work?
       </h2>
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12 px-6">
         {/* Left — Steps */}
-        <div className="w-full md:flex-1 space-y-8">
+        <div className="w-full md:flex-1 space-y-8" data-aos="fade-up">
           <div className="flex flex-col gap-4">
             {content.map((item, index) => (
               <div
@@ -42,7 +45,11 @@ const HowItWorks = () => {
         </div>
 
         {/* Right — Image */}
-        <div className="flex-1 flex justify-center">
+        <div
+          className="flex-1 flex justify-center"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
           <img
             src="/Frame.svg"
             alt="How it works illustration"
