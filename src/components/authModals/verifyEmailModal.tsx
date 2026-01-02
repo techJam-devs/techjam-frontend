@@ -33,7 +33,7 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();

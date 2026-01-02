@@ -12,7 +12,7 @@ const handleAxiosError = (error: unknown): Error => {
     // Network-level error
     if (!error.response) {
       return new Error(
-        "Server currently unavailable. Please check your internet connection."
+        "Server currently unavailable. Please check your internet connection.",
       );
     }
 
@@ -21,7 +21,7 @@ const handleAxiosError = (error: unknown): Error => {
 
     const message =
       data?.error?.message ||
-      data?.message || 
+      data?.message ||
       (data?.errors?.length
         ? data.errors.map((e) => e.msg).join(", ")
         : null) ||

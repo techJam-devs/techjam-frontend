@@ -35,7 +35,6 @@ export interface RegisterResponse {
   } | null;
 }
 
-
 // resend OTP request
 export interface ResendOtpRequest {
   email: string;

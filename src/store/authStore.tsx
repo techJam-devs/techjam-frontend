@@ -41,7 +41,7 @@ const useAuthstore = create<AuthState>((set) => ({
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
       set({ error: message });
-      throw new Error(message); 
+      throw new Error(message);
     }
   },
 
@@ -58,7 +58,7 @@ const useAuthstore = create<AuthState>((set) => ({
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
       set({ error: message });
-      throw new Error(message); 
+      throw new Error(message);
     }
   },
 }));

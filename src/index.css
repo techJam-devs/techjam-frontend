@@ -6,7 +6,8 @@
   --color-mute-gray: #a3a3a3;
   --color-border-color: #d1d5db;
 }
-body, #root {
+body,
+#root {
   overflow-x: hidden;
 }
 
@@ -45,4 +46,3 @@ a {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
 }
-

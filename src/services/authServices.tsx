@@ -15,9 +15,9 @@ import type {
 
 // login
 export const LoginService = async (
-  formData: LoginRequest
+  formData: LoginRequest,
 ): Promise<LoginResponse> => {
-   console.log("Calling:", authAxios.defaults.baseURL + "/login");
+  console.log("Calling:", authAxios.defaults.baseURL + "/login");
   try {
     const response = await authAxios.post<LoginResponse>("/login", formData);
     return response.data;
@@ -28,7 +28,7 @@ export const LoginService = async (
 
 // register
 export const RegisterService = async (
-  formData: RegisterRequest
+  formData: RegisterRequest,
 ): Promise<RegisterResponse> => {
   try {
     const response = await authAxios.post("/register", formData);
@@ -40,7 +40,7 @@ export const RegisterService = async (
 
 // resend OTP
 export const ResendOtpService = async (
-  email: string
+  email: string,
 ): Promise<ResendOtpResponse> => {
   try {
     const response = await authAxios.post("/resend-otp", { email });
