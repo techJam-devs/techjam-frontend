@@ -3,7 +3,7 @@
  * @returns Service page component
  */
 
-import WorkingTeam from "/src/assets/services.png"
+import WorkingTeam from "/src/assets/services.png";
 import FAQAccordion from "../components/common/Faq";
 import TechSupport from "../components/common/TechSupport";
 import WhoWeServe from "../components/common/WhoweServe";
