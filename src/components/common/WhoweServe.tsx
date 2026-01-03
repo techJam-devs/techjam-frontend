@@ -1,7 +1,7 @@
 /**
  * @returns components
  */
-import TechIcon from "/src/assets/we-serve.png"
+import TechIcon from "/src/assets/we-serve.png";
 
 const WhoWeServe = () => {
   const audiences = [

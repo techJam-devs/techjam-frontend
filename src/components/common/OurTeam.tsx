@@ -1,10 +1,10 @@
 /**
  * @description This is the Our Team component used in the About page
  */
-import Marcus from "../../assets/marcus.webp"
-import Otega from "../../assets/ortega.webp"
-import Deborah from "../../assets/deb.webp"
-import Thelma from "../../assets/thelma.webp"
+import Marcus from "../../assets/marcus.webp";
+import Otega from "../../assets/ortega.webp";
+import Deborah from "../../assets/deb.webp";
+import Thelma from "../../assets/thelma.webp";
 
 const OurTeam = () => {
   const images = [
@@ -15,12 +15,12 @@ const OurTeam = () => {
     },
     {
       src: Deborah,
-      radius: "rounded-full rounded-tr-none",
+      radius: "rounded-full rounded-bl-none",
       color: "bg-gray-400",
     },
     {
       src: Otega,
-      radius: "rounded-full rounded-bl-none",
+      radius: "rounded-full rounded-tr-none",
       color: "bg-pink-400",
     },
 
@@ -41,13 +41,13 @@ const OurTeam = () => {
     {
       name: "Deborah",
       role: "Project manager, keeping the team in check with years of expertise handling projects and delivering good results.",
-      border: "border-t-pink-400 border-r-yellow-400",
+      border: "border-l-pink-400",
       delay: 300,
     },
     {
       name: "Otega Otite",
       role: "Our backend lead, building security and database for applications.",
-      border: "border-l-red-400 border-b-blue",
+      border: "border-t-red-400 border-r-yellow-400",
       delay: 500,
     },
 
