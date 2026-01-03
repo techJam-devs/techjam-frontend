@@ -17,7 +17,6 @@ import type {
 export const LoginService = async (
   formData: LoginRequest,
 ): Promise<LoginResponse> => {
-  console.log("Calling:", authAxios.defaults.baseURL + "/login");
   try {
     const response = await authAxios.post<LoginResponse>("/login", formData);
     return response.data;

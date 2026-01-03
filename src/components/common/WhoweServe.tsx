@@ -1,6 +1,7 @@
 /**
  * @returns components
  */
+import TechIcon from "/src/assets/we-serve.png"
 
 const WhoWeServe = () => {
   const audiences = [
@@ -26,7 +27,7 @@ const WhoWeServe = () => {
         >
           <div className="w-full max-w-md md:max-w-lg h-96 md:h-[400px] rounded-2xl overflow-hidden">
             <img
-              src="/src/assets/we-serve.png"
+              src={TechIcon}
               alt="Team working"
               className="w-full h-full object-cover"
               data-aos="zoom-in"
@@ -42,7 +43,7 @@ const WhoWeServe = () => {
               className="text-2xl md:text-4xl font-semibold text-center text-white mb-16"
               data-aos="fade-up"
             >
-              Who TechJam Is For??
+              Who TechJam Is For?
             </h2>
 
             <div className="flex flex-col gap-6 max-w-4xl mx-auto">

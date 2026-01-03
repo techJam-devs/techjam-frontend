@@ -1,26 +1,31 @@
 /**
  * @description This is the Our Team component used in the About page
  */
+import Marcus from "../../assets/marcus.webp"
+import Otega from "../../assets/ortega.webp"
+import Deborah from "../../assets/deb.webp"
+import Thelma from "../../assets/thelma.webp"
 
 const OurTeam = () => {
   const images = [
     {
-      src: "/src/assets/marcus.webp",
+      src: Marcus,
       radius: "rounded-full rounded-br-none",
       color: "bg-yellow-400",
     },
     {
-      src: "/src/assets/deb.webp",
-      radius: "rounded-full rounded-bl-none",
-      color: "bg-pink-400",
-    },
-    {
-      src: "/src/assets/ortega.webp",
+      src: Deborah,
       radius: "rounded-full rounded-tr-none",
       color: "bg-gray-400",
     },
     {
-      src: "/src/assets/thelma.webp",
+      src: Otega,
+      radius: "rounded-full rounded-bl-none",
+      color: "bg-pink-400",
+    },
+
+    {
+      src: Thelma,
       radius: "rounded-full rounded-tl-none",
       color: "bg-purple-400",
     },
@@ -34,17 +39,18 @@ const OurTeam = () => {
       delay: 600,
     },
     {
-      name: "Otega Otite",
-      role: "Our backend lead, building security and database for applications.",
-      border: "border-l-red-400 border-b-blue",
-      delay: 500,
-    },
-    {
       name: "Deborah",
       role: "Project manager, keeping the team in check with years of expertise handling projects and delivering good results.",
       border: "border-t-pink-400 border-r-yellow-400",
       delay: 300,
     },
+    {
+      name: "Otega Otite",
+      role: "Our backend lead, building security and database for applications.",
+      border: "border-l-red-400 border-b-blue",
+      delay: 500,
+    },
+
     {
       name: "Thelma",
       role: "Project manager, keeping the team in check with years of expertise handling projects and delivering good results.",

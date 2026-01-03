@@ -36,7 +36,7 @@ const ContactUs = () => {
             <form className="space-y-6">
               {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-xs font-medium mb-1">
                   Full Name
                 </label>
                 <input
@@ -48,7 +48,7 @@ const ContactUs = () => {
 
               {/* Phone Number */}
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-xs font-medium mb-1">
                   Phone Number
                 </label>
                 <input
@@ -60,7 +60,7 @@ const ContactUs = () => {
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-xs font-medium mb-1">
                   Email Address
                 </label>
                 <input
@@ -72,7 +72,7 @@ const ContactUs = () => {
 
               {/* Message */}
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-xs font-medium mb-1">
                   Message
                 </label>
                 <textarea

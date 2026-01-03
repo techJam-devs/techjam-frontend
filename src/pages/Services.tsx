@@ -3,6 +3,7 @@
  * @returns Service page component
  */
 
+import WorkingTeam from "/src/assets/services.png"
 import FAQAccordion from "../components/common/Faq";
 import TechSupport from "../components/common/TechSupport";
 import WhoWeServe from "../components/common/WhoweServe";
@@ -11,11 +12,11 @@ const Services = () => {
   const services = [
     {
       title: "Collaborative Project Hub",
-      text: "TechJam connects beginners with real hands-on projects created by individuals start-ups and community members. Users can join project teams, contribute their skills and work in environments that simulate real workplace collaboration.",
+      text: "TechJam connects beginners with real hands-on projects created by individuals, start-ups and community members. Users can join project teams, contribute their skills and work in environments that simulate real workplace collaboration.",
     },
     {
       title: "Project creation for innovators",
-      text: "For creators, startups and team leads, TechJam offers a simple way to post projects and recruit contributors. Weather you're building a new app, designing a website or experimenting with a tech idea, the platform helps you gather the right people to bring your idea to life.",
+      text: "For creators, startups and team leads, TechJam offers a simple way to post projects and recruit contributors. Whether you're building a new app, designing a website or experimenting with a tech idea, the platform helps you gather the right people to bring your idea to life.",
     },
     {
       title: "Skill-Based team matching",
@@ -23,15 +24,15 @@ const Services = () => {
     },
     {
       title: "Mentorship & Guided learning",
-      text: "TechJam connects beginners with real hands-on projects created by individuals, startups and community members. Users can join project teams, contribute their skills and work in environments that stimulate real workplace collaboration.",
+      text: "Our platform pairs learners with experienced mentors and real-world projects. Participants gain hands-on experience by collaborating on tasks, building skills, and navigating challenges in authentic team environments.",
     },
     {
       title: "Community forum & learning space",
-      text: " For creators startups and team leads, TechJam offers a simple way to post projects and recruit contributors. Weather you're building a new app, designing a website or experimenting with a tech idea, the platform helps you gather the right people to bring your idea to life.",
+      text: " For creators startups and team leads, TechJam offers a simple way to post projects and recruit contributors. Whether you're building a new app, designing a website or experimenting with a tech idea, the platform helps you gather the right people to bring your idea to life.",
     },
     {
       title: "Portfolio & Experience building",
-      text: "Our algorithm helps match contributors to projects base on their skills, interests and experience level. This ensures every user finds a project that fits their learning goals and personal strengths.",
+      text: "TechJam helps users build a strong portfolio by connecting them with projects tailored to their skills and interests. Contributors gain practical experience, showcase their work, and grow their professional profile through meaningful collaborations.",
     },
   ];
 
@@ -116,7 +117,7 @@ const Services = () => {
         >
           <div className="w-full max-w-md md:max-w-lg h-64 md:h-[400px] rounded-2xl overflow-hidden">
             <img
-              src="/src/assets/services.png"
+              src={WorkingTeam}
               alt="Team working"
               className="w-full h-full object-cover"
               data-aos="zoom-in"

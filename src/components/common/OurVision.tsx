@@ -40,7 +40,7 @@ const OurVision = () => {
             only learn but thrive, gaining the confidence, experience and
             connections needed to succeed in the tech industry. <b />
             Whether it's building a mobile app, designing a website or
-            contributing to open-source projects. Ou vision is to ensure that no
+            contributing to open-source projects. Our vision is to ensure that no
             beginner feels stuck, unskilled or isolated.
           </p>
         </div>
