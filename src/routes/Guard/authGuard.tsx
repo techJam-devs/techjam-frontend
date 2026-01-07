@@ -1,6 +1,6 @@
 /**
- * @description This build an auth guard that prevents un authorized users from accessing the dashboard
- * @access Auth users
+ * @description AuthGuard protects routes from unauthenticated users
+ * @access Authenticated users only
  */
 
 import { useState, useEffect } from "react";
@@ -9,32 +9,23 @@ import useAuthstore from "../../store/authStore";
 import PageLoader from "../../components/common/PageLoader";
 
 interface AuthGuardProps {
-  redirectTo?: string; // Direct redirection path
+  redirectTo?: string; // Path to redirect unauthenticated users
 }
 
 export const AuthGuard = ({ redirectTo = "/" }: AuthGuardProps) => {
-  const { getMe, user } = useAuthstore();
-  const [loading, setLoading] = useState<boolean>(true);
+  const { user } = useAuthstore();
+  const [loading, setLoading] = useState(true);
 
-  // check user authentication
+  // Read state only
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        if (!user) {
-          await getMe();
-        }
-      } catch (err) {
-        console.error("Auth check failed:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
-  }, [user, getMe]);
+    // Simulate a small delay to ensure store has initialized
+    const timer = setTimeout(() => setLoading(false), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
-  if (loading) return <PageLoader />; // show loader while checking
+  if (loading) return <PageLoader />; // Show loader while auth status is determined
 
-  if (!user) return <Navigate to={redirectTo} replace />; // redirect non-auth users
+  if (!user) return <Navigate to={redirectTo} replace />; // Redirect if not authenticated
 
-  return <Outlet />; // // allow verified user
+  return <Outlet />; // Render protected route
 };

@@ -16,10 +16,9 @@ export const LoginSchema = joi.object({
       "string.email": "Please provide a valid email address",
       "any.required": "Email is required",
     }),
-  password: joi.string().min(8).required().messages({
+  password: joi.string().required().messages({
     "string.base": "Password must be a string",
     "string.empty": "Password is required",
-    "string.min": "Password must be at least 8 characters long",
     "any.required": "Password is required",
   }),
 });
@@ -85,5 +84,41 @@ export const verifyOtpSchema = joi.object({
     .messages({
       "string.empty": "OTP is required",
       "string.pattern.base": "OTP must be exactly 5 digits",
+    }),
+});
+
+export const ResetPasswordSchema = joi.object({
+  password: joi
+    .string()
+    .pattern(
+      new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_])[A-Za-z\\d@$!%*?&_]{8,}$",
+      ),
+    )
+    .min(8)
+    .required()
+    .messages({
+      "string.pattern.base":
+        "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character",
+      "string.empty": "Password is required",
+      "any.required": "Password is required",
+    }),
+  confirmPassword: joi.string().valid(ref("password")).required().messages({
+    "any.only": "Passwords do not match",
+    "string.empty": "Confirm password is required",
+    "any.required": "Confirm password is required",
+  }),
+});
+
+export const ForgetPasswordSchema = joi.object({
+  email: joi
+    .string()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.base": "Email must be a string",
+      "string.empty": "Email is required",
+      "string.email": "Please provide a valid email address",
+      "any.required": "Email is required",
     }),
 });

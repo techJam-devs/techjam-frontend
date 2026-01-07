@@ -16,24 +16,19 @@ import type {
   RegisterRequest,
   MeResponse,
   AuthUser,
+  LogoutResponse,
 } from "../types/auth.types";
 
 interface AuthState {
   user: AuthUser | null;
-  error: string | null;
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
   getMe: () => Promise<void>;
-  clearError: () => void;
-  logout: () => void;
+  logout: () => Promise<LogoutResponse>;
 }
 
 const useAuthstore = create<AuthState>((set) => ({
   user: null,
-  error: null,
-
-  // clear global error
-  clearError: () => set({ error: null }),
 
   // register
   register: async (formData) => {
@@ -47,11 +42,8 @@ const useAuthstore = create<AuthState>((set) => ({
 
       // Fetch api service
       await RegisterService(payload);
-
-      set({ error: null });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
-      set({ error: message });
       throw new Error(message);
     }
   },
@@ -65,10 +57,9 @@ const useAuthstore = create<AuthState>((set) => ({
 
       // Api service
       const res = await LoginService(formData);
-      set({ user: res.data.user as AuthUser, error: null });
+      set({ user: res.data.user as AuthUser });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Unknown error";
-      set({ error: message });
       throw new Error(message);
     }
   },
@@ -77,24 +68,19 @@ const useAuthstore = create<AuthState>((set) => ({
   getMe: async () => {
     try {
       const res: MeResponse = await GetMeService();
-      set({ user: res.data.user, error: null });
+      set({ user: res.data.user });
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Failed to fetch user.";
-      set({ error: message, user: null });
       throw new Error(message);
     }
   },
 
   // Log out
-  logout: async () => {
-    try {
-      await LogoutService();
-    } catch (error) {
-      console.error("Failed to log out", error);
-    } finally {
-      set({ user: null, error: null });
-    }
+  logout: async (): Promise<LogoutResponse> => {
+    const response = await LogoutService();
+    set({ user: null });
+    return response;
   },
 }));
 

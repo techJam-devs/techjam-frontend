@@ -34,8 +34,9 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
     },
   ];
 
-  const { register, error, clearError } = useAuthstore();
+  const { register } = useAuthstore();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -46,7 +47,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
 
   // Handle data input
   const handleDataInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    clearError();
+    setError(null);
     const { name, type, value, checked } = e.target;
     setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
   };
@@ -64,6 +65,9 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
       localStorage.setItem("pendingEmail", formData.email);
       onSwitch?.("verifyEmail");
     } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
       console.error(err);
     } finally {
       setLoading(false);
@@ -97,9 +101,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
               name="email"
               placeholder="Email"
               value={formData.email}
-              onChange={(e): void =>
-                setFormData({ ...formData, [e.target.name]: e.target.value })
-              }
+              onChange={handleDataInput}
               autoComplete="email"
             />
             <Input

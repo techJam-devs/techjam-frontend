@@ -15,16 +15,20 @@ import PublicRouteGuard from "./Guard/PublicRouteGuard";
 const AppRoute = () => {
   return (
     <Routes>
-      <Route element={<AppLayout />}>{PublicRoutes}</Route>
-      <Route
-        path="/reset-password"
-        element={
-          <PublicRouteGuard>
-            <ResetPassword />
-          </PublicRouteGuard>
-        }
-      />
+      {/* Public pages with layout */}
+      <Route element={<AppLayout />}>
+        {PublicRoutes}
+
+        {/* Reset password is also public */}
+        <Route element={<PublicRouteGuard />}>
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Route>
+      </Route>
+
+      {/* Authenticated routes */}
       {AuthRoutes}
+
+      {/* 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

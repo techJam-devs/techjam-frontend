@@ -10,6 +10,7 @@ import Button from "../common/Button";
 import { LockIcon } from "lucide-react";
 import { ForgetPasswordService } from "../../services/authServices";
 import useToastStore from "../../store/notificationStore";
+import { ForgetPasswordSchema } from "../../validation/authValidation";
 
 type AuthPortal = "signIn" | "forgetPassword";
 interface ForgetPasswordProps {
@@ -35,9 +36,9 @@ const ForgetPasswordModal: React.FC<ForgetPasswordProps> = ({ onSwitch }) => {
     }
 
     // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      addToast({ message: "Enter a valid email address", type: "error" });
+    const { error: validationErr } = ForgetPasswordSchema.validate(email);
+    if (validationErr) {
+      addToast({ message: validationErr?.details[0].message, type: "error" });
       return;
     }
 

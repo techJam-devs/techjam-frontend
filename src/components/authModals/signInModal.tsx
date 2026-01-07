@@ -43,8 +43,9 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
   ];
   const { addToast } = useToastStore();
   const navigate = useNavigate();
-  const { error, login, clearError } = useAuthStore();
+  const { login } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -53,7 +54,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
   const { email, password } = formData;
   const payload = { email, password };
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    clearError();
+    setError(null);
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
@@ -70,12 +71,10 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
       addToast({ message: "Authentication successful!", type: "success" });
       navigate("/dashboard");
     } catch (err: unknown) {
-      const error = err as Error;
-      const message = error.message || "Login failed.";
-      console.log("Login error status:", message);
+      const message = err instanceof Error ? err.message : "Login failed.";
 
-      // Detect if the error message contains verify keyword
-      if (/verify/i.test(error.message)) {
+      // No login error but Detect if the error message contains verify keyword
+      if (/verify/i.test(message)) {
         localStorage.setItem("pendingEmail", formData.email);
         localStorage.setItem("pendingVerification", "true");
         onSwitch?.("verifyEmail");
@@ -86,8 +85,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
         });
         return;
       }
-
-      addToast({ message: error.message || "Login failed", type: "error" });
+      setError(message);
     } finally {
       setLoading(false);
     }

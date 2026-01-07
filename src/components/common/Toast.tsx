@@ -1,5 +1,5 @@
 /**
- *@description This builds a custom toast accepting three argument
+ *@description This builds a custom toast accepting three arguments
                 - success, error, info 
  */
 
@@ -9,9 +9,9 @@ import type { ToastType } from "../../store/notificationStore";
 import { X } from "lucide-react";
 
 const typeColors: Record<ToastType, string> = {
-  success: "bg-green-500",
-  error: "bg-red-500",
-  info: "bg-blue-500",
+  success: "bg-green-400",
+  error: "bg-red-400",
+  info: "bg-yellow-500",
 };
 
 const Toast: React.FC = () => {

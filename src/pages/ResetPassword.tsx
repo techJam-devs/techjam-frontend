@@ -10,6 +10,7 @@ import Button from "../components/common/Button";
 import { LockIcon, XIcon } from "lucide-react";
 import { ResetPasswordService } from "../services/authServices";
 import useToastStore from "../store/notificationStore";
+import { ResetPasswordSchema } from "../validation/authValidation";
 
 const ResetPasswordPage = () => {
   const { addToast } = useToastStore();
@@ -38,8 +39,7 @@ const ResetPasswordPage = () => {
 
     setToken(tokenParam);
     setEmail(emailParam);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
+  }, [location.search, addToast, navigate]);
 
   const handleDataInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,8 +49,10 @@ const ResetPasswordPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      addToast({ message: "Passwords do not match.", type: "error" });
+    // Validate user input
+    const { error: validationErr } = ResetPasswordSchema.validate(formData);
+    if (validationErr) {
+      addToast({ message: validationErr.details[0].message, type: "error" });
       return;
     }
 

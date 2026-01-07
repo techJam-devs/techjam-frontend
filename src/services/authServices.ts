@@ -113,7 +113,7 @@ export const ForgetPasswordService = async (email: string) => {
       const message =
         error?.response?.data?.message ||
         error?.response?.data?.error ||
-        "Failed to verify email";
+        "Failed to send password reset email";
       throw new Error(message);
     }
     // Non-Axios / unexpected error
