@@ -1,5 +1,5 @@
 /**
- *@description This builds a custom toast accepting three argumenst
+ *@description This builds a custom toast accepting three argument
                 - success, error, info 
  */
 

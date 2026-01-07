@@ -2,9 +2,14 @@
  * @description Displays only after user registration is successful
  */
 
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ProceedModal = () => {
+  const navigate = useNavigate();
+
+  const handleProceed = () => {
+    navigate("/dashboard", { replace: true });
+  };
   return (
     <div className="max-w-4xl bg-blue flex flex-col items-center justify-center gap-8 rounded-2xl h-[400px] sm:h-[450px] text-center shadow-xl mx-auto">
       {/* Welcome Text */}
@@ -20,12 +25,12 @@ const ProceedModal = () => {
       />
 
       {/* Proceed Button */}
-      <Link
-        to="/dashboard"
+      <button
+        onClick={handleProceed}
         className="bg-white text-blue/80 rounded-full py-3 sm:py-4 px-12 sm:px-16 shadow-md hover:bg-gradient-to-t from-gray-300 hover:text-blue text-base sm:text-lg font-semibold transition-all duration-300"
       >
-        Proceed to Profile
-      </Link>
+        Proceed to Dashboard
+      </button>
     </div>
   );
 };

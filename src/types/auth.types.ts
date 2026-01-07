@@ -2,19 +2,27 @@
  * @description This is the types for all auth operations
  */
 
+// Auth User
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  isEmailVerified: boolean;
+  lastLogin?: string;
+}
+
 // login request
 export interface LoginRequest {
   email: string;
   password: string;
 }
-
-// login response
+// Login response
 export interface LoginResponse {
   success: boolean;
   message: string;
-  data?: unknown | null;
-  error?: {
-    message: string;
+  data: {
+    user: AuthUser;
   };
 }
 
@@ -29,10 +37,12 @@ export interface RegisterRequest {
 export interface RegisterResponse {
   success: boolean;
   message: string;
-  data?: unknown | null;
-  error?: {
-    message?: string;
-  } | null;
+}
+
+// otp verification response
+export interface VerifyOtpResponse {
+  success: boolean;
+  message: string;
 }
 
 // resend OTP request
@@ -44,9 +54,19 @@ export interface ResendOtpRequest {
 export interface ResendOtpResponse {
   success: boolean;
   message: string;
-  data?: unknown | null;
-  error?: {
-    success: boolean;
-    message: string;
-  } | null;
+  error?: string;
+}
+
+// Log out response
+export interface LogoutResponse {
+  success: boolean;
+  message: string;
+}
+
+// Get me response
+export interface MeResponse {
+  success: boolean;
+  data: {
+    user: AuthUser;
+  };
 }

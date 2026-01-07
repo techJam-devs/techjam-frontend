@@ -1,20 +1,67 @@
+/**
+ * @description Forget password page
+ */
+
 import type React from "react";
 import { useState } from "react";
 import Input from "../common/Input";
 import FormWrapper from "../common/FormWrapper";
 import Button from "../common/Button";
 import { LockIcon } from "lucide-react";
+import { ForgetPasswordService } from "../../services/authServices";
+import useToastStore from "../../store/notificationStore";
 
+type AuthPortal = "signIn" | "forgetPassword";
 interface ForgetPasswordProps {
-  onSwitch?: (portal: "signUp" | "signIn" | "forgetPassword") => void;
+  onSwitch?: (portal: AuthPortal) => void;
 }
 
 const ForgetPasswordModal: React.FC<ForgetPasswordProps> = ({ onSwitch }) => {
+  const { addToast } = useToastStore();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // handle submit
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // check if email exist
+    if (!email.trim()) {
+      addToast({
+        message: "Please enter a valid email address",
+        type: "error",
+      });
+      return;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      addToast({ message: "Enter a valid email address", type: "error" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await ForgetPasswordService(email);
+      addToast({
+        message: "Password reset email sent. Check your inbox!",
+        type: "success",
+      });
+
+      // Success and navigate to login
+      setTimeout(() => {
+        onSwitch?.("signIn");
+      }, 500);
+    } catch (err: unknown) {
+      const error = err as Error;
+      addToast({
+        message: error.message || "Failed to send password reset email",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +87,8 @@ const ForgetPasswordModal: React.FC<ForgetPasswordProps> = ({ onSwitch }) => {
             <div className="w-full">
               <Button
                 type="submit"
-                text="Account Recovery"
+                text={loading ? "Sending reset link...⌛" : "Account recovery"}
+                disabled={loading}
                 className="w-full"
               />
             </div>

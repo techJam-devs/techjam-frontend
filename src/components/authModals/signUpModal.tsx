@@ -59,6 +59,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
     try {
       await register(formData);
       // After successful registration, proceed to verification
+      localStorage.setItem("name", formData.name);
       localStorage.setItem("pendingVerification", "true");
       localStorage.setItem("pendingEmail", formData.email);
       onSwitch?.("verifyEmail");

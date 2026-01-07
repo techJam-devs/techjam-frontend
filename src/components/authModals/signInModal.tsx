@@ -15,12 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
 import useToastStore from "../../store/notificationStore";
 
-type AuthPortal =
-  | "signIn"
-  | "signUp"
-  | "verifyEmail"
-  | "forgetPassword"
-  | "resetPassword";
+type AuthPortal = "signIn" | "signUp" | "verifyEmail" | "forgetPassword";
 
 interface SignInModalProps {
   onSwitch?: (portal: AuthPortal) => void;
@@ -53,7 +48,6 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rememberMe: false,
   });
 
   const { email, password } = formData;
@@ -75,8 +69,25 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
       await login(payload);
       addToast({ message: "Authentication successful!", type: "success" });
       navigate("/dashboard");
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      const error = err as Error;
+      const message = error.message || "Login failed.";
+      console.log("Login error status:", message);
+
+      // Detect if the error message contains verify keyword
+      if (/verify/i.test(error.message)) {
+        localStorage.setItem("pendingEmail", formData.email);
+        localStorage.setItem("pendingVerification", "true");
+        onSwitch?.("verifyEmail");
+        addToast({
+          message:
+            "Your account is not verified. Please enter the OTP sent to your email",
+          type: "info",
+        });
+        return;
+      }
+
+      addToast({ message: error.message || "Login failed", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -114,24 +125,7 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
               autoComplete="current-password"
             />
             {/** Remember me + forgot password */}
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  name="rememberMe"
-                  checked={formData.rememberMe}
-                  onChange={handleInput}
-                  className="w-4 h-4 cursor-pointer"
-                />
-                <label
-                  htmlFor="rememberMe"
-                  className="cursor-pointer select-none text-xs"
-                >
-                  Remember me
-                </label>
-              </div>
-
+            <div className="mb-6 flex justify-end">
               <p
                 onClick={() => onSwitch?.("forgetPassword")}
                 className="text-xs text-blue cursor-pointer hover:underline"
@@ -161,14 +155,14 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
               <FcGoogle size={20} />{" "}
             </span>
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FaApple size={20} />
+              <FaApple />
             </span>
           </div>
         </div>
 
         {/* Switch to Sign Up */}
         <div className="text-center text-gray-600 mt-5 text-base md:text-md">
-          <p className="text-sm">
+          <p>
             Don't have an account?{" "}
             <span
               className="text-blue cursor-pointer hover:underline"

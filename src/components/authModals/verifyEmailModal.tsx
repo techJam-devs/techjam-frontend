@@ -6,19 +6,31 @@ import { UserCheck } from "lucide-react";
 import Button from "../common/Button";
 import FormWrapper from "../common/FormWrapper";
 import React, { useState, useRef } from "react";
-import { ResendOtpService } from "../../services/authServices";
+import useToastStore from "../../store/notificationStore";
+import {
+  ResendOtpService,
+  VerifyOtpService,
+} from "../../services/verificationServices";
+import useAuthStore from "../../store/authStore";
 
 interface VerifyModalProps {
   onSwitch?: (portal: "proceed") => void;
 }
 
 const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
-  const email = localStorage.getItem("pendingEmail"); // get the user email from local storage
+  const { getMe } = useAuthStore();
+  const { addToast } = useToastStore();
+  const email = localStorage.getItem("pendingEmail") as string; // get the user email from local storage
+  const name = localStorage.getItem("name"); // Fetch the pending user name
   const [timeLeft, setTimeLeft] = useState(30); // countdown in seconds
   const [otp, setOtp] = useState<string[]>(Array(5).fill("")); // 5 boxes
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [resendSuccess, setResendSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (index: number, value: string) => {
+    setError(null);
     if (!/^[0-9]?$/.test(value)) return; // accept only digits
 
     const newOtp = [...otp];
@@ -45,6 +57,12 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
       const res = await ResendOtpService(email as string);
       if (res.success) {
         setTimeLeft(45);
+        setResendSuccess(true);
+
+        // Hide message automatically after 3 seconds
+        setTimeout(() => {
+          setResendSuccess(false);
+        }, 3000);
       } else {
         console.error("Failed to resend OTP:", res.message);
       }
@@ -65,15 +83,46 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
   }, [timeLeft]);
 
   // submit code to backend
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const code = otp.join("");
-    console.log("Verification Code:", code);
-    localStorage.removeItem("pendingVerification");
-    localStorage.removeItem("pendingEmail");
-    onSwitch?.("proceed"); // navigate to profile dashboard
+    if (!email) {
+      setError("Email is missing");
+      return;
+    }
+    const otpValue = otp.join(""); // convert otp to string
 
-    // send `code` to backend for verification
+    if (otpValue.length !== 5) {
+      setError("Please enter the complete OTP");
+      return;
+    }
+    setLoading(true);
+    try {
+      // backend verification
+      const result = await VerifyOtpService(email, otpValue);
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      // Refresh to update global auth store
+      await getMe();
+      addToast({
+        message: result.message ?? "Account has been verified successfully",
+        type: "success",
+      });
+
+      // if successful, remove all data from local storage and proceed to dashboard
+      localStorage.removeItem("pendingVerification");
+      localStorage.removeItem("pendingEmail");
+      localStorage.removeItem("name");
+      onSwitch?.("proceed"); // navigate to profile dashboard
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Verification failed");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,9 +132,14 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
         {/** form  */}
         <FormWrapper
           title="Enter Verification Code"
-          subtitle={`Hi, Peter, we have sent you a verification code to ${email ?? "your email"}`}
+          subtitle={`Hi ${name ?? "user"}, we have sent you a verification code to ${email ?? "your email"}`}
         >
           <form onSubmit={handleSubmit} className="space-y-7 mt-16">
+            {error && (
+              <p className="text-xs text-red-500 bg-red-200 p-1 rounded-sm border-l-2">
+                {error}
+              </p>
+            )}
             <div className="flex items-center justify-center gap-3">
               {otp.map((digit, i) => (
                 <input
@@ -116,23 +170,31 @@ const VerifyEmailModal: React.FC<VerifyModalProps> = ({ onSwitch }) => {
                 </>
               ) : (
                 <>
-                  <p>
-                    {" "}
-                    Didn't get Code? {""}
-                    <span
-                      onClick={handleResendOtp}
-                      className="text-red-400 cursor-pointer hover:underline font-medium"
-                    >
-                      Resend Code
-                    </span>
-                  </p>
+                  Didn't get Code? {""}
+                  <span
+                    onClick={handleResendOtp}
+                    className="text-red-400 cursor-pointer hover:underline font-medium"
+                  >
+                    Resend Code
+                  </span>
                 </>
               )}
             </p>
+            {/* Inline success message */}
+            {resendSuccess && (
+              <p className="text-center text-green-500 text-sm mt-1">
+                Verification code sent!
+              </p>
+            )}
 
             {/** submit  button */}
             <div className="w-full">
-              <Button type="submit" text="Verify" className="w-full" />
+              <Button
+                disabled={loading}
+                type="submit"
+                text={loading ? "verifying account... ⌛" : "Verify"}
+                className="w-full"
+              />
             </div>
           </form>
         </FormWrapper>
