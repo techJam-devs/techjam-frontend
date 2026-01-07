@@ -53,7 +53,7 @@ const Userstories = () => {
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-12 mb-14">
         {/* Left side - Title + Arrows */}
         <div className="flex flex-col items-start gap-6">
-          <h2 className="text-2xl">
+          <h2 className="text-2xl text-center md:text-start w-full">
             From our <br />{" "}
             <span
               className="font-bold text-4xl"
@@ -64,7 +64,10 @@ const Userstories = () => {
               community
             </span>
           </h2>
-          <p className="text-base md:text-lg" data-aos="fade-up">
+          <p
+            className="text-base md:text-lg text-center md:text-start w-full"
+            data-aos="fade-up"
+          >
             Here is what other subscribers are saying about projects from
             TechJam
           </p>

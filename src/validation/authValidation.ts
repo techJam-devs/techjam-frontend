@@ -67,3 +67,23 @@ export const RegisterSchema = joi.object({
     "any.required": "You must accept the Terms and Conditions",
   }),
 });
+
+export const verifyOtpSchema = joi.object({
+  email: joi
+    .string()
+    .email({ tlds: { allow: false } }) // allow any domain
+    .required()
+    .messages({
+      "string.empty": "Email is required",
+      "string.email": "Email must be valid",
+    }),
+
+  otp: joi
+    .string()
+    .pattern(/^\d{5}$/) // exactly 5 digits
+    .required()
+    .messages({
+      "string.empty": "OTP is required",
+      "string.pattern.base": "OTP must be exactly 5 digits",
+    }),
+});

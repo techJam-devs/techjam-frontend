@@ -16,7 +16,6 @@ type AuthPortal =
   | "signUp"
   | "verifyEmail"
   | "forgetPassword"
-  | "resetPassword"
   | "proceed";
 
 interface ModalProps {

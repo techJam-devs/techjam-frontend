@@ -7,6 +7,5 @@ export type AuthPortal =
   | "signIn"
   | "signUp"
   | "forgetPassword"
-  | "resetPassword"
   | "verifyEmail"
   | "proceed";

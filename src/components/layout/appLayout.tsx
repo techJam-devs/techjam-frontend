@@ -1,26 +1,16 @@
 import React from "react";
 import Navbar from "./navbar";
 import Footer from "./Footer";
-import { useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom"; // important
 
-interface appLayout {
-  children: React.ReactNode;
-}
-
-const AppLayout: React.FC<appLayout> = ({ children }) => {
-  const location = useLocation();
-
-  // list of routes nav and footer shouldn't display in
-  const hiddenRoutes = ["/dashboard"];
-
-  const hideNav = hiddenRoutes.some((path) =>
-    location.pathname.startsWith(path),
-  );
+const AppLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-      {!hideNav && <Navbar />}
-      <main>{children}</main>
-      {!hideNav && <Footer />}
+      <Navbar />
+      <main>
+        <Outlet /> {/* renders child routes */}
+      </main>
+      <Footer />
     </div>
   );
 };

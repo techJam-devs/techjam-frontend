@@ -4,15 +4,28 @@
  *              This app route will be mounted in the app.tsx file
  */
 
-import { Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PublicRoutes from "./publicRoutes";
 import AuthRoutes from "./AuthRoutes";
+import NotFound from "../pages/NotFound";
+import AppLayout from "../components/layout/appLayout";
+import ResetPassword from "../pages/ResetPassword";
+import PublicRouteGuard from "./Guard/PublicRouteGuard";
 
 const AppRoute = () => {
   return (
     <Routes>
-      {PublicRoutes}
+      <Route element={<AppLayout />}>{PublicRoutes}</Route>
+      <Route
+        path="/reset-password"
+        element={
+          <PublicRouteGuard>
+            <ResetPassword />
+          </PublicRouteGuard>
+        }
+      />
       {AuthRoutes}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
