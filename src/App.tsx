@@ -25,22 +25,26 @@ const App = () => {
   // Authenticate user
   useEffect(() => {
     const initAuth = async () => {
-      try {
-        await getMe(); // fetch current user
-      } catch {
-        console.log("No authenticated user found");
-      } finally {
-        setLoading(false); // hide loader
+      if (!user) {
+        try {
+          await getMe();
+        } catch (err) {
+          console.error(err);
+          console.error("No authenticated user found:", err);
+        }
       }
+      setLoading(false);
     };
     initAuth();
-  }, [getMe]);
+  }, [getMe, user]);
 
   // Log auth user
+  const devOnly = (fn: () => void) => {
+    if (import.meta.env.MODE === "development") fn();
+  };
+
   useEffect(() => {
-    if (user) {
-      console.log("Current logged-in user:", user);
-    }
+    devOnly(() => console.log("Current logged-in user:", user));
   }, [user]);
 
   if (loading) return <PageLoader />;

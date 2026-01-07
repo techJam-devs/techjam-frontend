@@ -12,14 +12,14 @@ interface PayloadRequest {
   message: string;
 }
 
-interface contactResponse {
+interface ContactResponse {
   success: boolean;
   message: string;
 }
 
 export const ContactUsService = async (
   payload: PayloadRequest,
-): Promise<contactResponse> => {
+): Promise<ContactResponse> => {
   try {
     const response = await axiosInstance.post("/contact", payload);
     return response.data;

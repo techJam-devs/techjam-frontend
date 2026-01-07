@@ -1,41 +1,57 @@
 /**
- * @description Profile component for our dashboard nav
+ * @description Navbar profile component
+ * - Displays user avatar or initials
+ * - On click, shows the reusable ProfileSettingsDropDown
  */
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { getInitials } from "../../utils/getInitials";
+import useAuthstore from "../../store/authStore";
+import ProfileSettingsDropDown from "./ProfileSettingsDropDown";
 
 const Profile = () => {
+  const { user } = useAuthstore();
   const [show, setShow] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShow(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  if (!user) return null;
 
   return (
-    <div>
+    <div className="relative" ref={dropdownRef}>
+      {/* Avatar Button */}
       <button
         type="button"
-        onClick={() => setShow(!show)}
-        title="profile"
-        className="cursor-pointer flex"
+        onClick={() => setShow((prev) => !prev)}
+        className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-gray-300 text-white text-sm font-bold"
+        title="Profile"
       >
-        <img
-          src="/subhero/Ellipse.png"
-          alt="profile picture"
-          className="border border-gray-300 size-10 rounded-full"
-        />
+        {user.avatar ? (
+          <img
+            src={user.avatar}
+            alt="profile"
+            className="w-full h-full rounded-full object-cover"
+          />
+        ) : (
+          getInitials(user.name)
+        )}
       </button>
 
-      {/** ==== show settings page =============*/}
-      {show && (
-        <div className="bg-white fixed top-[6rem] w-full left-0 h-screen px-4 xl:px-18 z-50 ">
-          {/** ========== banner header ========== */}
-          <div className="h-[110px] w-full">
-            <img
-              src="/banner.png"
-              alt="profile banner image"
-              className="h-full rounded-t-xl w-full object-cover"
-            />
-          </div>
-          <button onClick={() => setShow(!show)}> X</button>
-        </div>
-      )}
+      {/* Reusable Dropdown */}
+      <ProfileSettingsDropDown show={show} onClose={() => setShow(false)} />
     </div>
   );
 };
