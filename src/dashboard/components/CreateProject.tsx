@@ -37,45 +37,35 @@ const CreateProjectButton = () => {
               {/* project title */}
               <input
                 type="text"
-                className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="Enter project name"
               />
 
               {/* tech stack */}
               <input
                 type="text"
-                className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="Tech stack"
               />
 
               {/* description */}
               <textarea
                 rows={3}
-                className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 placeholder="Short project description..."
               />
 
               {/* Roles + Experience */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Roles dropdown */}
-                <select
-                  className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Required roles
-                  </option>
-                  <option value="frontend">Frontend Developer</option>
-                  <option value="backend">Backend Developer</option>
-                  <option value="fullstack">Full Stack Developer</option>
-                  <option value="designer">UI/UX Designer</option>
-                  <option value="pm">Project Manager</option>
-                </select>
-
+              <div className="grid md:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="Required Roles (e.g. Project manager, backend..)"
+                />
                 {/* Experience */}
                 <input
                   type="text"
-                  className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Experience (e.g. 2+ yrs)"
                 />
               </div>
@@ -83,21 +73,21 @@ const CreateProjectButton = () => {
               {/* Start + End date */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">
+                  <label className="block text-xs md:text--sm text-gray-600 mb-1">
                     Start Date
                   </label>
                   <input
                     type="date"
-                    className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">
+                  <label className="block text-xs md:text-sm text-gray-600 mb-1">
                     End Date
                   </label>
                   <input
                     type="date"
-                    className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -106,7 +96,7 @@ const CreateProjectButton = () => {
               <div className="flex items-center border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
                 <input
                   type="url"
-                  className="w-full bg-transparent focus:outline-none"
+                  className="w-full text-sm bg-transparent focus:outline-none"
                   placeholder="Link to collaboration tool (e.g. Trello)"
                 />{" "}
                 <Link2 className="w-4 h-4 text-gray-400 mr-2" />
