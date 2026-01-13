@@ -8,9 +8,11 @@ import ProfileSettingsDropDown from "./ProfileSettingsDropDown"; // reuseable
 import StatusIcon from "./StatusIcon";
 import DashNotification from "./DashNotification";
 import Profile from "./Profile";
+import ProfileSettingsPage from "./ProfileSettingsPage";
 
 const DashNav = () => {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const mobileRef = useRef<HTMLDivElement>(null);
 
   // Close mobile dropdown when clicking outside
@@ -20,7 +22,7 @@ const DashNav = () => {
         mobileRef.current &&
         !mobileRef.current.contains(event.target as Node)
       ) {
-        setShowMobileMenu(false);
+        setShowDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -49,7 +51,7 @@ const DashNav = () => {
         className="md:hidden flex justify-between gap-3 w-full px-4"
         ref={mobileRef}
       >
-        {/* Search bar */}
+        {/* Search bar + menu icon*/}
         <div className="items-center w-full">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-blue-400" />
@@ -66,17 +68,27 @@ const DashNav = () => {
           <button
             type="button"
             className="cursor-pointer hover:bg-blue rounded-full p-1"
-            onClick={() => setShowMobileMenu((prev) => !prev)}
+            onClick={() => setShowDropdown(!showDropdown)}
           >
             <Menu className="text-gray-600 hover:text-white" />
           </button>
-
-          {/* Reuseable dropdown for mobile menu */}
-          <ProfileSettingsDropDown
-            show={showMobileMenu}
-            onClose={() => setShowMobileMenu(false)}
-          />
         </div>
+
+        {/* Dropdown */}
+        <ProfileSettingsDropDown
+          show={showDropdown}
+          onClose={() => setShowDropdown(false)}
+          onOpenProfile={() => {
+            setShowDropdown(false); // close dropdown
+            setShowModal(true); // open modal
+          }}
+        />
+
+        {/* Profile Modal */}
+        <ProfileSettingsPage
+          show={showModal}
+          onClose={() => setShowModal(false)}
+        />
       </div>
     </header>
   );

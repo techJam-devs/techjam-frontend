@@ -8,10 +8,12 @@ import { useState, useRef, useEffect } from "react";
 import { getInitials } from "../../utils/getInitials";
 import useAuthstore from "../../store/authStore";
 import ProfileSettingsDropDown from "./ProfileSettingsDropDown";
+import ProfileSettingsPage from "../components/ProfileSettingsPage";
 
 const Profile = () => {
   const { user } = useAuthstore();
-  const [show, setShow] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown if clicked outside
@@ -21,7 +23,7 @@ const Profile = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setShow(false);
+        setShowDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -35,7 +37,7 @@ const Profile = () => {
       {/* Avatar Button */}
       <button
         type="button"
-        onClick={() => setShow((prev) => !prev)}
+        onClick={() => setShowDropdown((prev) => !prev)}
         className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-gray-300 text-white text-sm font-bold"
         title="Profile"
       >
@@ -50,8 +52,21 @@ const Profile = () => {
         )}
       </button>
 
-      {/* Reusable Dropdown */}
-      <ProfileSettingsDropDown show={show} onClose={() => setShow(false)} />
+      {/* Dropdown */}
+      <ProfileSettingsDropDown
+        show={showDropdown}
+        onClose={() => setShowDropdown(false)}
+        onOpenProfile={() => {
+          setShowDropdown(false); // close dropdown
+          setShowModal(true); // open modal
+        }}
+      />
+
+      {/* Profile Modal */}
+      <ProfileSettingsPage
+        show={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };

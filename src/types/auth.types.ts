@@ -8,6 +8,9 @@ export interface AuthUser {
   name: string;
   email: string;
   avatar?: string;
+  bio?: string;
+  location?: string;
+  username?: string;
   isEmailVerified: boolean;
   lastLogin?: string;
 }
