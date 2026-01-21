@@ -1,84 +1,153 @@
-/**
- * @description RightPanel component: displays pending requests/notifications
- */
-
-import { Link } from "react-router-dom";
-import { X, Check } from "lucide-react";
-
-interface Updates {
-  id: number | string;
-  name: string;
-  role: string;
-  job: string;
-  avatarUrl: string;
-}
-const dummyUpdate: Updates[] = [
-  {
-    id: 1,
-    name: "Jane Doe",
-    role: "Project Manager",
-    job: "Website Redesign",
-    avatarUrl: "/subhero/Ellipse.png",
-  },
-  {
-    id: 2,
-    name: "John Smith",
-    role: "Developer",
-    job: "Mobile App",
-    avatarUrl: "/subhero/Ellipse.png",
-  },
-];
+import { useEffect, useState } from "react";
+import {
+  acceptRequestService,
+  declineRequestService,
+  viewAllRequestService,
+} from "../../services/projectService";
+import type { projectRequest } from "../../types/projects.types";
+import { getInitials } from "../../utils/getInitials";
+import useToastStore from "../../store/notificationStore";
+import RequestDetailsModal from "./modal/requestModal";
 
 const RequestPanel = () => {
+  const [projectRequests, setProjectRequests] = useState<projectRequest[]>([]);
+  const { addToast } = useToastStore();
+
+  const [selectedProject, setSelectedProject] = useState<projectRequest | null>(
+    null,
+  );
+  const [selectedUser, setSelectedUser] = useState<
+    projectRequest["joinRequests"][0] | null
+  >(null);
+
+  // Fetch requests
+  useEffect(() => {
+    const fetchAllRequest = async () => {
+      const res = await viewAllRequestService();
+      setProjectRequests(res.projects);
+    };
+    fetchAllRequest();
+  }, []);
+
+  // Helpers
+  const removeRequestFromState = (projectId: string, userId: string) => {
+    setProjectRequests((prev) =>
+      prev
+        .map((project) =>
+          project._id === projectId
+            ? {
+                ...project,
+                joinRequests: project.joinRequests.filter(
+                  (u) => u._id !== userId,
+                ),
+              }
+            : project,
+        )
+        .filter((project) => project.joinRequests.length > 0),
+    );
+  };
+
+  // Actions
+  const acceptRequest = async () => {
+    if (!selectedProject || !selectedUser) return;
+
+    try {
+      await acceptRequestService(selectedProject._id, selectedUser._id);
+      addToast({ message: "Request accepted", type: "success" });
+      removeRequestFromState(selectedProject._id, selectedUser._id);
+      closeModal();
+    } catch (error) {
+      addToast({
+        message:
+          error instanceof Error ? error.message : "Something went wrong",
+        type: "error",
+      });
+    }
+  };
+
+  const declineRequest = async () => {
+    if (!selectedProject || !selectedUser) return;
+
+    try {
+      await declineRequestService(selectedProject._id, selectedUser._id);
+      addToast({ message: "Request declined", type: "success" });
+      removeRequestFromState(selectedProject._id, selectedUser._id);
+      closeModal();
+    } catch (error) {
+      addToast({
+        message:
+          error instanceof Error ? error.message : "Something went wrong",
+        type: "error",
+      });
+    }
+  };
+
+  const openModal = (
+    project: projectRequest,
+    user: projectRequest["joinRequests"][0],
+  ) => {
+    setSelectedProject(project);
+    setSelectedUser(user);
+  };
+
+  const closeModal = () => {
+    setSelectedProject(null);
+    setSelectedUser(null);
+  };
+
   return (
     <div className="flex flex-col h-screen p-4 border-l border-border-color overflow-auto">
       <h2 className="font-semibold text-sm mb-4">Pending Requests</h2>
 
-      <ul>
-        {dummyUpdate.length > 0 ? (
-          dummyUpdate.map((update) => (
-            <li
-              key={update.id}
-              className="flex flex-row items-start justify-between p-2 bg-white shadow border-2 border-border-color"
-            >
-              {/** avatar and request info div */}
-              <div className="flex flex-row flex-1 items-center gap-2">
-                <img
-                  src={update.avatarUrl}
-                  alt={update.name}
-                  className="size-6 lg:w-12 lg:h-12 border bg-gray-700 border-purple-500 rounded-full object-cover"
-                />
-                <div className="text-start">
-                  <p className="font-semibold text-sm">{update.name}</p>
-                  <p className="text-xs text-gray-500">{update.role}</p>
-                  <p className="mt-1 text-xs text-gray-500">
-                    To join: {update.job}{" "}
-                    <span className="text-blue underline pl-3 cursor-pointer ">
-                      {" "}
-                      <Link to="/">View</Link>
-                    </span>{" "}
-                  </p>
+      {projectRequests.length ? (
+        projectRequests.map((project) => (
+          <div key={project._id} className="mb-4">
+            {project.joinRequests.map((user) => (
+              <div
+                key={user._id}
+                onClick={() => openModal(project, user)}
+                className="flex items-center justify-between p-3 bg-white border-2 border-border-color shadow cursor-pointer hover:bg-gray-50 transition hover:shadow-xl"
+              >
+                <div className="flex items-center gap-3">
+                  {user.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold">
+                      {getInitials(user.name)}
+                    </div>
+                  )}
+
+                  <div>
+                    <p className="font-semibold text-sm">{user.name}</p>
+                    <p className="text-xs text-gray-500">
+                      {user.role ?? "N/A"} • {project.title}
+                    </p>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-400 mt-10">
+          You have no new requests.
+        </p>
+      )}
 
-              {/* Right: Actions */}
-              <div className="flex items-end justify-end gap-3 w-12 mt-3">
-                <button className="cursor-pointer bg-red-100 text-red-500 rounded-full hover:bg-red-600 hover:text-white transition">
-                  <X className="size-4" />
-                </button>
-                <button className="cursor-pointer text-blue bg-blue-100 rounded-full hover:bg-blue hover:text-white transition-all duration-300">
-                  <Check className="size-4" />
-                </button>
-              </div>
-            </li>
-          ))
-        ) : (
-          <li className="p-3 flex flex-col justify-center items-center mt-10 text-gray-400">
-            <p className="text-3xl">📁</p>
-            You have no recent Update
-          </li>
-        )}
-      </ul>
+      {selectedProject && selectedUser && (
+        <RequestDetailsModal
+          isOpen
+          project={selectedProject}
+          user={selectedUser}
+          onClose={closeModal}
+          onAccept={acceptRequest}
+          onDecline={declineRequest}
+        />
+      )}
     </div>
   );
 };
