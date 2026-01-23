@@ -15,6 +15,7 @@ body,
 #root {
   overflow-x: hidden;
   font-family: "Lexend", sans-serif;
+  color: #2f2f2f; /** gray */
 }
 
 button,

@@ -9,8 +9,8 @@ import type { ToastType } from "../../store/notificationStore";
 import { X } from "lucide-react";
 
 const typeColors: Record<ToastType, string> = {
-  success: "bg-green-400",
-  error: "bg-red-400",
+  success: "bg-green-500",
+  error: "bg-red-500",
   info: "bg-yellow-500",
 };
 

@@ -1,47 +1,74 @@
 /**
  * @description This is the home page of our dashboard and this serve as the page for our Best Match page
+ *              Displays all projects available
  */
 
+import { useEffect, useState } from "react";
+import type { Project } from "../types/projects.types.ts";
 import BestMatchCard from "./components/BestMatchCard";
 import { Cloud } from "lucide-react";
-
-const projects = [
-  {
-    time: "09:15am",
-    status: "in-progress" as const,
-    title: "E-commerce Website",
-    description:
-      "Build an online store with payment integration, product listings, and admin dashboard.",
-    duration: "01/Mar/25 - 30/Mar/25",
-    techStack: ["Next.js", "TypeScript", "MongoDB", "TailwindCSS"],
-  },
-  {
-    time: "01:40pm",
-    status: "completed" as const,
-    title: "Portfolio Website",
-    description:
-      "Design and develop a personal portfolio showcasing projects, skills, and blog posts.",
-    duration: "15/Jan/25 - 01/Feb/25",
-    techStack: ["React", "CSS", "Framer Motion"],
-  },
-  {
-    time: "05:30pm",
-    status: "pending" as const,
-    title: "Banking App",
-    description:
-      "Develop a mobile banking app with account overview, fund transfer, and notifications.",
-    duration: "10/Apr/25 - 30/Jun/25",
-    techStack: ["React Native", "Node.js", "PostgreSQL"],
-  },
-];
+import { getAllProjectsService } from "../services/projectService.ts";
+import axios from "axios";
 
 const Index = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch all projects
+  useEffect(() => {
+    setLoading(true);
+    const fetchProjects = async () => {
+      setLoading(true);
+      try {
+        const res = await getAllProjectsService();
+        setProjects(res.projects);
+      } catch (error) {
+        console.error(error);
+        if (axios.isAxiosError(error)) {
+          setError(error.message ?? "Error fetching projects.");
+        }
+        setError("unknown error.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  // display loading animation while fetching projects
+  if (loading) {
+    return (
+      <div className="p-6 grid md:grid-cols-2 gap-4">
+        {[1, 2, 3, 4].map((_, idx) => (
+          <div
+            key={idx}
+            className="rounded-lg border border-gray-300 p-5 shadow-md animate-pulse"
+          >
+            <div className="h-4 bg-gray-300 rounded w-3/4 mb-4" />
+            <div className="h-3 bg-gray-300 rounded w-full mb-2" />
+            <div className="h-3 bg-gray-300 rounded w-5/6 mb-2" />
+            <div className="h-3 bg-gray-300 rounded w-2/3" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 text-red-500 w-full flex flex-1 item-center justify-center">
+        {error}
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 overflow-y-auto">
       {projects.length > 0 ? (
         <div className="grid md:grid-cols-2 gap-4">
-          {projects.map((project, idx) => (
-            <BestMatchCard key={idx} {...project} />
+          {projects.map((project) => (
+            <BestMatchCard key={project._id} {...project} />
           ))}
         </div>
       ) : (

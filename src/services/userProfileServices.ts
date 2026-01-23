@@ -5,21 +5,25 @@
 
 import axios from "axios";
 import axiosInstance from "../utils/axiosInstance";
+import type { AuthUser } from "../types/auth.types";
 
 interface avatarResponse {
   success: boolean;
   message: string;
+  user: AuthUser;
 }
 
 interface updateProfileResponse {
   success: boolean;
   message: string;
+  user: AuthUser;
 }
 
 interface updateProfileRequest {
   bio?: string;
   location?: string;
   username?: string;
+  role?: string;
 }
 
 // Auto upload avatar

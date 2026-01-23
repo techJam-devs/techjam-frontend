@@ -19,12 +19,13 @@ interface ProfileSettingsModalProps {
 }
 
 const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
-  const { user } = useAuthstore();
+  const { user, setUser } = useAuthstore();
   const { addToast } = useToastStore();
 
   const [username, setUsername] = useState(user?.username || "");
   const [location, setLocation] = useState(user?.location || "");
   const [bio, setBio] = useState(user?.bio || "");
+  const [role, setRole] = useState(user?.role || "");
   const [loading, setLoading] = useState(false);
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -37,13 +38,15 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
     username: user?.username || "",
     location: user?.location || "",
     bio: user?.bio || "",
+    role: user?.role || "",
   };
 
   // verify if changes has occur
   const hasChanges =
     username !== initialProfile.username ||
     location !== initialProfile.location ||
-    bio !== initialProfile.bio;
+    bio !== initialProfile.bio ||
+    role !== initialProfile.role;
 
   // Clean up prevent memory leaks
   useEffect(() => {
@@ -76,6 +79,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
 
     try {
       const res = await avatarUploadService(imgFile);
+      setUser(res.user);
       addToast({
         message: res.message ?? "Profile picture uploaded.",
         type: "success",
@@ -95,13 +99,14 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
     if (!hasChanges) return;
     setLoading(true);
     try {
-      await updateProfileService({
+      const response = await updateProfileService({
         username,
         location,
         bio,
+        role,
       });
+      setUser(response.user);
       addToast({ message: "Profile update successful.", type: "success" });
-      onClose();
     } catch (error) {
       addToast({ message: "Update failed. Please try again.", type: "error" });
       console.error("Profile update failed", error);
@@ -172,7 +177,9 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
             {/* Name & Email + location */}
             <div className="pb-2 space-y-1">
               <h2 className="text-2xl font-semibold">{user.name}</h2>
-              <p className="text-gray-600">{user.email}</p>
+              <p className="text-sm font-medium text-gray-600">
+                {user.role || "No Role set"}
+              </p>
 
               <div className="flex items-center gap-1 text-sm text-gray-500">
                 <MapPin className="w-4 h-4" />
@@ -192,7 +199,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                 type="text"
                 value={user.name}
                 readOnly
-                className="w-full text-sm p-2 rounded-lg text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
+                className="w-full text-sm p-2 rounded-lg text-gray-400 border-gray-300 bg-gray-50 cursor-not-allowed"
               />
             </div>
 
@@ -209,6 +216,18 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                 className="w-full p-2 rounded-lg text-sm border-gray-300 focus:ring-2 focus:ring-indigo-500"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Professional Role
+              </label>
+              <input
+                type="text"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                placeholder="e.g. Software Engineer"
+                className="w-full p-2 rounded-lg text-sm border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
 
             {/* Email */}
             <div>
@@ -220,7 +239,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                   type="email"
                   value={user.email}
                   readOnly
-                  className="w-full p-2 text-sm rounded-lg text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
+                  className="w-full p-2 text-sm rounded-lg text-gray-400 border-gray-300 bg-gray-50 cursor-not-allowed"
                 />
                 {user.isEmailVerified && (
                   <span className="flex items-center gap-1 text-xs text-green-700 bg-green-100 md:px-3 py-1 rounded-full font-medium">

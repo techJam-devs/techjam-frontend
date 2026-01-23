@@ -25,10 +25,14 @@ interface AuthState {
   register: (data: RegisterRequest) => Promise<void>;
   getMe: () => Promise<void>;
   logout: () => Promise<LogoutResponse>;
+  setUser: (user: AuthUser | null) => void;
+  clearUser: () => void;
 }
 
 const useAuthstore = create<AuthState>((set) => ({
   user: null,
+  setUser: (user) => set({ user }),
+  clearUser: () => set({ user: null }),
 
   // register
   register: async (formData) => {
