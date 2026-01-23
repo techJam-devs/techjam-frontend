@@ -8,6 +8,11 @@ import type { Project } from "../../types/projects.types";
 import { joinProjectRequestService } from "../../services/projectService";
 import { useState } from "react";
 import useToastStore from "../../store/notificationStore";
+import { Bookmark } from "lucide-react";
+import {
+  saveBookmarkService,
+  unsaveBookmarkService,
+} from "../../services/bookmarkProjectService";
 
 type ProjectStatus = "available" | "pending" | "completed" | "cancelled";
 
@@ -25,7 +30,14 @@ const statusTextColors: Record<ProjectStatus, string> = {
   cancelled: "text-red-600",
 };
 
-const BestMatchCard: React.FC<Project> = ({
+interface BestMatchCardProps extends Project {
+  initialIsSaved?: boolean;
+  onToggleSave?: (projectId: string, isSaved: boolean) => void;
+}
+
+const BestMatchCard: React.FC<BestMatchCardProps> = ({
+  initialIsSaved = false,
+  onToggleSave,
   _id,
   title,
   techStack,
@@ -39,6 +51,9 @@ const BestMatchCard: React.FC<Project> = ({
 }) => {
   const { addToast } = useToastStore();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState<boolean>(initialIsSaved);
+  const [saving, setSaving] = useState<boolean>(false);
+
   const start = new Date(startDate);
   const end = new Date(endDate);
   const projectDuration = `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
@@ -63,21 +78,74 @@ const BestMatchCard: React.FC<Project> = ({
     }
   };
 
+  // Save project as bookmark
+  const toggleSave = async () => {
+    if (saving) return;
+
+    const nextState = !isSaved;
+    setIsSaved(nextState);
+    setSaving(true);
+
+    try {
+      if (nextState) {
+        await saveBookmarkService(_id);
+      } else {
+        await unsaveBookmarkService(_id);
+      }
+
+      // Notify parent of the change
+      if (onToggleSave) onToggleSave(_id, nextState);
+    } catch (error) {
+      setIsSaved(!nextState); // rollback
+      addToast({
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to update saved project",
+        type: "error",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="w-full rounded-lg border border-border-color p-5 shadow-md space-y-3">
       {/*  time and status */}
       <div className="flex items-center justify-between text-xs text-mute-gray">
-        <span> {projectCreatedDate} </span>
-        <span className="flex items-center gap-1 text-xs font-medium">
-          <span
-            className={`inline-block h-2 w-2 rounded-full ${statusColors[status]}`}
-          />
-          <span
-            className={`first-letter:uppercase opacity-80 ${statusTextColors[status]}`}
+        <span>{projectCreatedDate}</span>
+
+        <div className="flex items-center gap-3">
+          {/* Save bookmark */}
+          <button
+            type="button"
+            onClick={toggleSave}
+            aria-label="Save project"
+            className="transition"
+            title="Save project"
           >
-            {status}
+            <Bookmark
+              size={18}
+              className={
+                isSaved
+                  ? "fill-blue text-blue"
+                  : "text-gray-400 hover:text-blue"
+              }
+            />
+          </button>
+
+          {/* Status */}
+          <span className="flex items-center gap-1 text-xs font-medium">
+            <span
+              className={`inline-block h-2 w-2 rounded-full ${statusColors[status]}`}
+            />
+            <span
+              className={`first-letter:uppercase opacity-80 ${statusTextColors[status]}`}
+            >
+              {status}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
 
       {/* Title */}

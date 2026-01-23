@@ -121,7 +121,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 text-white hover:text-gray-200"
+          className="absolute top-4 right-4 z-20 text-white hover:text-gray-200 bg-black rounded-full p-1"
         >
           <X className="w-6 h-6 text-orange-200" />
         </button>
