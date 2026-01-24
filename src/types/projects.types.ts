@@ -6,10 +6,19 @@ export interface ProjectTeamMember {
   user: {
     _id: string;
     name: string;
+    email: string;
     username: string;
     avatar: string;
+    role: string;
   };
   role?: string;
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  username: string;
+  avatar?: string;
 }
 
 // Full project data
@@ -20,11 +29,11 @@ export interface Project {
   description: string;
   experience?: string;
   requiredRoles: string[];
-  startDate: string;
-  endDate: string;
+  startDate: string | Date;
+  endDate: string | Date;
   link?: string;
-  creator: string;
-  status: "available" | "pending" | "completed" | "cancelled";
+  creator: User;
+  status: "available" | "in-progress" | "completed" | "cancelled";
   teamMembers: ProjectTeamMember[];
   joinRequests: string[];
   createdAt: string;

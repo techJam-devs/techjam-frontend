@@ -14,19 +14,19 @@ import {
   unsaveBookmarkService,
 } from "../../services/bookmarkProjectService";
 
-type ProjectStatus = "available" | "pending" | "completed" | "cancelled";
+type ProjectStatus = "available" | "in-progress" | "completed" | "cancelled";
 
 // controls dynamically the color by status
 const statusColors: Record<ProjectStatus, string> = {
   available: "bg-green-500",
   completed: "bg-blue-500",
-  pending: "bg-orange-500",
+  "in-progress": "bg-yellow-500",
   cancelled: "bg-red-600",
 };
 const statusTextColors: Record<ProjectStatus, string> = {
   available: "text-green-600",
   completed: "text-blue-600",
-  pending: "text-orange-600",
+  "in-progress": "text-yellow-600",
   cancelled: "text-red-600",
 };
 
@@ -110,7 +110,7 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({
   };
 
   return (
-    <div className="w-full rounded-lg border border-border-color p-5 shadow-md space-y-3">
+    <div className="w-full rounded-lg border border-border-color p-5 shadow-md space-y-3 hover:shadow-2xl">
       {/*  time and status */}
       <div className="flex items-center justify-between text-xs text-mute-gray">
         <span>{projectCreatedDate}</span>
