@@ -8,7 +8,7 @@ import RequestPanel from "./components/RightPanelRequests";
 
 const MobileRequest = () => {
   return (
-    <div>
+    <div className="md:hidden">
       <RequestPanel />
     </div>
   );

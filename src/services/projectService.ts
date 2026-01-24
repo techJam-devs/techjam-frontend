@@ -9,6 +9,7 @@ import type {
   createProjectResponse,
   getAllProjectsResponse,
   joinProjectResponse,
+  Project,
   requestResponse,
 } from "../types/projects.types";
 import axiosInstance from "../utils/axiosInstance";
@@ -55,6 +56,26 @@ export const getAllProjectsService =
       throw new Error("Unexpected error occurred. Please try again later.");
     }
   };
+
+// Fetch all projects am a member of
+export const getJoinedProjectsService = async (): Promise<Project[]> => {
+  try {
+    const response = await axiosInstance.get("/projects/joined");
+    return response.data.projects;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      if (!error.response) {
+        throw new Error(
+          "Unable to connect. Please check your internet connect",
+        );
+      }
+      throw new Error(
+        error.response?.data?.message ?? "Internal server error.",
+      );
+    }
+    throw new Error("Unexpected error occurred. Please try again later.");
+  }
+};
 
 // Join project
 export const joinProjectRequestService = async (
@@ -132,6 +153,26 @@ export const declineRequestService = async (
     const res = await axiosInstance.post(
       `/projects/${projectId}/requests/${userId}/decline`,
     );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (!error.response) {
+        throw new Error(
+          "Unable to connect. Please check your internet connect",
+        );
+      }
+      throw new Error(
+        error.response?.data?.message ?? "Internal server error.",
+      );
+    }
+    throw new Error("Unexpected error occurred. Please try again later.");
+  }
+};
+
+// Team member leaves project
+export const leaveProjectService = async (projectId: string) => {
+  try {
+    const res = await axiosInstance.post(`/projects/${projectId}/leave`);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -56,14 +56,14 @@ const ProfileSettingsDropDown = ({
       </div>
 
       <div className="px-4 py-2 border-b border-gray-200 text-center">
-        <p className="font-semibold text-gray-800">{user.name}</p>
+        <p className="font-semibold text-gray-800 text-sm">{user.name}</p>
       </div>
 
       <ul>
         <li>
           <button
             onClick={onOpenProfile} // <-- trigger modal directly
-            className="w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+            className="w-full flex items-center text-sm gap-2 text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
           >
             <User size={18} /> Profile
           </button>
@@ -71,7 +71,7 @@ const ProfileSettingsDropDown = ({
         <li>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+            className="w-full flex items-center text-sm gap-2 text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
           >
             <LogOut size={18} /> Logout
           </button>

@@ -2,8 +2,8 @@
  * @description This creates a plus icon to create projects
  */
 
-import { Link2, Plus, X } from "lucide-react";
-import React, { useState } from "react";
+import { Plus, X } from "lucide-react";
+import React, { useState, useRef } from "react";
 import useToastStore from "../../store/notificationStore";
 import { createProjectService } from "../../services/projectService";
 
@@ -29,63 +29,10 @@ const CreateProjectButton = () => {
       ? 0
       : projectData.description.trim().split(/\s+/).filter(Boolean).length;
 
-  // Add tech
-  const handleAddTech = () => {
-    const value = techInput.trim();
-    if (value && !projectData.techStack.includes(value)) {
-      setProjectData((prev) => ({
-        ...prev,
-        techStack: [...prev.techStack, value],
-      }));
-      setTechInput("");
-    }
-  };
+  const techInputRef = useRef<HTMLInputElement>(null);
+  const roleInputRef = useRef<HTMLInputElement>(null);
 
-  // Remove tech
-  const handleRemoveTech = (tech: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      techStack: prev.techStack.filter((t) => t !== tech),
-    }));
-  };
-
-  // Add role
-  const handleAddRole = () => {
-    const value = roleInput.trim();
-    if (value && !projectData.requiredRoles.includes(value)) {
-      setProjectData((prev) => ({
-        ...prev,
-        requiredRoles: [...prev.requiredRoles, value],
-      }));
-      setRoleInput("");
-    }
-  };
-
-  // Remove role
-  const handleRemoveRole = (role: string) => {
-    setProjectData((prev) => ({
-      ...prev,
-      requiredRoles: prev.requiredRoles.filter((r) => r !== role),
-    }));
-  };
-
-  // Optional: handle Enter key
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    type: "tech" | "role",
-  ) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-
-      if (type === "tech") {
-        handleAddTech();
-      } else if (type === "role") {
-        handleAddRole();
-      }
-    }
-  };
-
-  // Get user input +  control description input to max 100 words
+  // Get user input + control description input to max 100 words
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -93,11 +40,7 @@ const CreateProjectButton = () => {
 
     if (name === "description") {
       const words = value.trim().split(/\s+/).filter(Boolean);
-
-      // HARD STOP at 100 words
-      if (words.length > 100) {
-        return;
-      }
+      if (words.length > 100) return; // HARD STOP at 100 words
     }
 
     setProjectData((prev) => ({
@@ -106,7 +49,7 @@ const CreateProjectButton = () => {
     }));
   };
 
-  // Handle data submission
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -130,6 +73,7 @@ const CreateProjectButton = () => {
       setLoading(false);
     }
   };
+
   return (
     <>
       <button
@@ -141,10 +85,8 @@ const CreateProjectButton = () => {
         <Plus className="size-6 p-1 bg-blue-200 text-blue hover:bg-gray-300 rounded-full cursor-pointer" />
       </button>
 
-      {/** show create project pop up */}
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          {/* Modal box */}
           <div className="bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 relative mx-4 transition-all duration-500">
             <button
               onClick={() => setOpen(false)}
@@ -155,68 +97,82 @@ const CreateProjectButton = () => {
 
             <h2 className="text-lg font-semibold mb-4">Create New Project</h2>
 
-            {/* form */}
-            <form onSubmit={handleSubmit} className="space-y-4 text-gray-500">
-              {/* project title */}
-              <input
-                type="text"
-                name="title"
-                onChange={handleInputChange}
-                value={projectData.title}
-                className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="Enter project name"
-              />
-
-              {/* tech stack */}
-              <div className="flex flex-wrap gap-2 mb-2">
-                {projectData.techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1 text-xs"
-                  >
-                    {tech}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTech(tech)}
-                    >
-                      &times;
-                    </button>
-                  </span>
-                ))}
-              </div>
-              <input
-                type="text"
-                value={techInput}
-                onChange={(e) => setTechInput(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, "tech")}
-                placeholder="Tech stack"
-                className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-
-              {/* description */}
+            <form onSubmit={handleSubmit} className="space-y-4 text-gray-700">
+              {/* Project Title */}
               <div>
-                <p
-                  className={`text-xs ${
-                    wordsCount === 100
-                      ? "text-red-500 font-medium"
-                      : "text-gray-400"
-                  }`}
-                >
-                  {wordsCount}/100
-                </p>
-
-                <textarea
-                  name="description"
-                  value={projectData.description}
+                <label className="block text-sm font-medium mb-1">
+                  Project Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={projectData.title}
                   onChange={handleInputChange}
-                  rows={3}
+                  placeholder="Enter project name"
                   className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Short project description..."
+                  required
                 />
               </div>
 
-              {/* Roles + Experience */}
+              {/* Tech Stack */}
               <div>
+                <label className="block text-sm font-medium mb-1">
+                  Tech Stack
+                </label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {projectData.techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1 text-xs"
+                    >
+                      {tech}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setProjectData((prev) => ({
+                            ...prev,
+                            techStack: prev.techStack.filter((t) => t !== tech),
+                          }))
+                        }
+                        className="text-blue-600 hover:text-blue-900 font-bold"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    ref={techInputRef}
+                    type="text"
+                    value={techInput}
+                    onChange={(e) => setTechInput(e.target.value)}
+                    placeholder="Add a tech (e.g. React)"
+                    className="flex-1 border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const value = techInput.trim();
+                      if (!value || projectData.techStack.includes(value))
+                        return;
+                      setProjectData((prev) => ({
+                        ...prev,
+                        techStack: [...prev.techStack, value],
+                      }));
+                      setTechInput("");
+                      techInputRef.current?.focus(); // Auto-focus for mobile/desktop
+                    }}
+                    className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Roles */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Roles</label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {projectData.requiredRoles.map((role) => (
                     <span
@@ -226,43 +182,96 @@ const CreateProjectButton = () => {
                       {role}
                       <button
                         type="button"
-                        onClick={() => handleRemoveRole(role)}
+                        onClick={() =>
+                          setProjectData((prev) => ({
+                            ...prev,
+                            requiredRoles: prev.requiredRoles.filter(
+                              (r) => r !== role,
+                            ),
+                          }))
+                        }
+                        className="text-green-600 hover:text-green-900 font-bold"
                       >
-                        &times;
+                        ×
                       </button>
                     </span>
                   ))}
                 </div>
-                <input
-                  type="text"
-                  value={roleInput}
-                  onChange={(e) => setRoleInput(e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e, "role")}
-                  placeholder="Required Roles (e.g. Project Manager)"
-                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-                {/* Experience */}
-                <input
-                  type="text"
-                  name="experience"
+                <div className="flex gap-2">
+                  <input
+                    ref={roleInputRef}
+                    type="text"
+                    value={roleInput}
+                    onChange={(e) => setRoleInput(e.target.value)}
+                    placeholder="Add a role (e.g. Project Manager)"
+                    className="flex-1 border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const value = roleInput.trim();
+                      if (!value || projectData.requiredRoles.includes(value))
+                        return;
+                      setProjectData((prev) => ({
+                        ...prev,
+                        requiredRoles: [...prev.requiredRoles, value],
+                      }));
+                      setRoleInput("");
+                      roleInputRef.current?.focus(); // Auto-focus for mobile/desktop
+                    }}
+                    className="bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 transition"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Description
+                </label>
+                <p
+                  className={`text-xs ${wordsCount === 100 ? "text-red-500 font-medium" : "text-gray-400"}`}
+                >
+                  {wordsCount}/100 words
+                </p>
+                <textarea
+                  name="description"
+                  value={projectData.description}
                   onChange={handleInputChange}
-                  value={projectData.experience}
-                  className="w-full border text-sm mt-6 border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Experience (e.g. 2+ yrs)"
+                  rows={3}
+                  placeholder="Short project description..."
+                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
-              {/* Start + End date */}
+              {/* Experience */}
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Experience
+                </label>
+                <input
+                  type="text"
+                  name="experience"
+                  value={projectData.experience}
+                  onChange={handleInputChange}
+                  placeholder="Experience (e.g. 2+ yrs)"
+                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              {/* Start & End Dates */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs md:text--sm text-gray-600 mb-1">
+                  <label className="block text-xs md:text-sm text-gray-600 mb-1">
                     Start Date
                   </label>
                   <input
                     type="date"
                     name="startDate"
-                    onChange={handleInputChange}
                     value={projectData.startDate}
+                    onChange={handleInputChange}
                     className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
@@ -273,33 +282,38 @@ const CreateProjectButton = () => {
                   <input
                     type="date"
                     name="endDate"
-                    onChange={handleInputChange}
                     value={projectData.endDate}
+                    onChange={handleInputChange}
                     className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* External link */}
-              <div className="flex items-center border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
-                <input
-                  type="url"
-                  name="link"
-                  onChange={handleInputChange}
-                  value={projectData.link}
-                  className="w-full text-sm bg-transparent focus:outline-none"
-                  placeholder="Link to collaboration tool (e.g. Trello)"
-                />{" "}
-                <Link2 className="w-4 h-4 text-gray-400 mr-2" />
+              {/* External Link */}
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Collaboration Link
+                </label>
+                <div className="flex items-center border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                  <input
+                    type="url"
+                    name="link"
+                    value={projectData.link}
+                    onChange={handleInputChange}
+                    placeholder="Link to Trello, Notion, etc."
+                    className="flex-1 text-sm bg-transparent focus:outline-none"
+                  />
+                </div>
               </div>
 
+              {/* Submit Button */}
               <div className="flex justify-end">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue text-white font-medium py-2 px-8 rounded-full hover:bg-blue-700 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                  className="bg-blue-500 text-white font-medium py-2 px-8 rounded-full hover:bg-blue-600 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Creating ...⌛" : "Create project"}
+                  {loading ? "Creating ...⌛" : "Create Project"}
                 </button>
               </div>
             </form>

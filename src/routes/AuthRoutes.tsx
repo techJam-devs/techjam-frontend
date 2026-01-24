@@ -10,7 +10,7 @@ import Dashboard404 from "../pages/Dashboard404";
 
 const Dashboard = lazy(() => import("../dashboard/layout"));
 const Home = lazy(() => import("../dashboard/index"));
-const MostRecent = lazy(() => import("../dashboard/most-recent"));
+const JoinedProjects = lazy(() => import("../dashboard/joined-projects"));
 const SavedProjects = lazy(() => import("../dashboard/saved-projects"));
 const MyProjects = lazy(() => import("../dashboard/my-projects"));
 const ViewAnalytics = lazy(() => import("../dashboard/view-analytics"));
@@ -27,7 +27,7 @@ const AuthRoutes = (
       }
     >
       <Route index element={<Home />} />
-      <Route path="most-recent" element={<MostRecent />} />
+      <Route path="joined-projects" element={<JoinedProjects />} />
       <Route path="saved-projects" element={<SavedProjects />} />
       <Route path="my-projects" element={<MyProjects />} />
       <Route path="view-analytics" element={<ViewAnalytics />} />

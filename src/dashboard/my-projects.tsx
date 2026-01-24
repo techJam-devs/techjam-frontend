@@ -1,154 +1,194 @@
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Cloud, Crown, UserCheck, Clock } from "lucide-react";
-import { getInitials } from "../utils/getInitials";
+import { Cloud } from "lucide-react";
 
-// ----------------------
-// Types
-// ----------------------
-type ProjectRelation = "owner" | "member" | "pending";
-type ProjectStatus = "in-progress" | "completed" | "cancelled";
+import type { Project } from "../types/projects.types";
+import useToastStore from "../store/notificationStore";
+import {
+  deleteProjectService,
+  getCreatedProjectsService,
+  updateProjectService,
+} from "../services/creatorProjectService";
+import ConfirmActionModal from "./components/modal/confirmModal";
+import ProjectViewModal from "./components/modal/projectViewModal";
 
-interface MyProject {
-  _id: string;
-  title: string;
-  description: string;
-  duration: string;
-  techStack: string[];
-  relation: ProjectRelation;
-  status: ProjectStatus;
-}
-
-// ----------------------
-// Dummy Data
-// ----------------------
-const projects: MyProject[] = [
-  {
-    _id: "1",
-    title: "E-commerce Website",
-    description:
-      "Build an online store with payment integration, product listings, and admin dashboard.",
-    duration: "01/Mar/25 - 30/Mar/25",
-    techStack: ["Next.js", "TypeScript", "MongoDB", "TailwindCSS"],
-    relation: "owner",
-    status: "in-progress",
-  },
-  {
-    _id: "2",
-    title: "Portfolio Website",
-    description:
-      "Design and develop a personal portfolio showcasing projects, skills, and blog posts.",
-    duration: "15/Jan/25 - 01/Feb/25",
-    techStack: ["React", "CSS", "Framer Motion"],
-    relation: "member",
-    status: "completed",
-  },
-  {
-    _id: "3",
-    title: "Banking App",
-    description:
-      "Develop a mobile banking app with account overview, fund transfer, and notifications.",
-    duration: "10/Apr/25 - 30/Jun/25",
-    techStack: ["React Native", "Node.js", "PostgreSQL"],
-    relation: "pending",
-    status: "cancelled",
-  },
-];
-
-// ----------------------
-// Status Badge Config
-// ----------------------
-const relationConfig: Record<
-  ProjectRelation,
-  { label: string; color: string; icon: JSX.Element }
-> = {
-  owner: {
-    label: "Owner",
-    color: "bg-green-100 text-green-600",
-    icon: <Crown className="size-3" />,
-  },
-  member: {
-    label: "Member",
-    color: "bg-blue-100 text-blue-600",
-    icon: <UserCheck className="size-3" />,
-  },
-  pending: {
-    label: "Pending",
-    color: "bg-yellow-100 text-yellow-600",
-    icon: <Clock className="size-3" />,
-  },
-};
-
-// ----------------------
-// Component
-// ----------------------
 const MyProjects = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+  const [viewProject, setViewProject] = useState<Project | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   const [searchParams] = useSearchParams();
   const statusParam = searchParams.get("status");
-  const relationParam = searchParams.get("relation");
 
-  const filteredProjects = projects.filter((p) => {
-    const statusMatch = statusParam ? p.status === statusParam : true;
-    const relationMatch = relationParam ? p.relation === relationParam : true;
-    return statusMatch && relationMatch;
-  });
+  const { addToast } = useToastStore();
+
+  // ===== Fetch projects =====
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await getCreatedProjectsService();
+        setProjects(data);
+      } catch (err: unknown) {
+        if (err instanceof Error) setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  // ===== Filter projects =====
+  const filteredProjects = useMemo(() => {
+    if (!statusParam) return projects;
+    return projects.filter((p) => p.status === statusParam);
+  }, [projects, statusParam]);
+
+  // ===== Delete project =====
+  const handleDeleteConfirm = async () => {
+    if (!projectToDelete) return;
+
+    try {
+      setDeleting(true);
+      await deleteProjectService(projectToDelete._id);
+
+      setProjects((prev) => prev.filter((p) => p._id !== projectToDelete._id));
+
+      addToast({ message: "Project deleted successfully", type: "success" });
+    } catch {
+      addToast({ message: "Failed to delete project", type: "error" });
+    } finally {
+      setDeleting(false);
+      setProjectToDelete(null);
+    }
+  };
+
+  // ===== Update project (from modal) =====
+  const handleUpdateProject = async (updatedProject: Project) => {
+    try {
+      const updated = await updateProjectService(
+        updatedProject._id,
+        updatedProject,
+      );
+      setProjects((prev) =>
+        prev.map((p) => (p._id === updated._id ? updated : p)),
+      );
+      addToast({ message: "Project updated successfully", type: "success" });
+      setViewProject(null);
+    } catch {
+      addToast({ message: "Failed to update project", type: "error" });
+    }
+  };
+
+  // ===== Loader =====
+  if (loading) {
+    return (
+      <div className="p-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-40 rounded-lg bg-gray-200 animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p className="text-center text-red-500 mt-10">{error}</p>;
+  }
+
+  if (filteredProjects.length === 0) {
+    return (
+      <div className="flex flex-col items-center pt-16 gap-3">
+        <div className="w-20 h-20 flex items-center justify-center rounded-lg border-2 border-dashed">
+          <Cloud className="w-8 h-8 text-gray-400" />
+        </div>
+        <p className="text-sm text-gray-500">No projects found</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6">
-      <h2 className="text-lg font-semibold mb-4">My Projects</h2>
+    <section className="p-6 space-y-6">
+      <h2 className="text-lg font-semibold">My Projects</h2>
 
-      {filteredProjects.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => {
-            const relation = relationConfig[project.relation];
-            return (
-              <div
-                key={project._id}
-                className="border border-border-color rounded-lg p-4 bg-white shadow-sm hover:shadow transition"
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {filteredProjects.map((project) => {
+          const statusColor =
+            project.status === "completed"
+              ? "bg-blue-100 text-blue-600"
+              : project.status === "cancelled"
+                ? "bg-red-100 text-red-600"
+                : project.status === "in-progress"
+                  ? "bg-yellow-100 text-yellow-500"
+                  : "bg-green-100 text-green-600";
+
+          return (
+            <div
+              key={project._id}
+              className="relative rounded-lg border border-gray-200 hover:shadow-xl p-4 bg-white shadow-sm transition"
+            >
+              {/* Status */}
+              <span
+                className={`absolute top-3 right-3 px-2 py-0.5 rounded-full text-xs capitalize ${statusColor}`}
               >
-                {/* Header */}
-                <div className="flex items-start justify-between">
-                  <h3 className="font-semibold text-sm">{project.title}</h3>
-                  <span
-                    className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${relation.color}`}
-                  >
-                    {relation.icon}
-                    {relation.label}
-                  </span>
-                </div>
+                {project.status}
+              </span>
 
-                {/* Description */}
-                <p className="text-xs text-gray-500 mt-2">
-                  {project.description}
-                </p>
+              <h3 className="font-semibold text-sm">{project.title}</h3>
 
-                {/* Footer */}
-                <div className="flex items-center justify-between mt-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold text-gray-700">
-                      {getInitials(project.title)}
-                    </div>
-                    <span className="text-xs text-gray-600">
-                      {project.duration}
-                    </span>
-                  </div>
+              <p className="text-xs text-gray-500 mt-2 line-clamp-3">
+                {project.description}
+              </p>
 
-                  <button className="text-xs text-blue-500 opacity-80 hover:opacity-100">
-                    View
-                  </button>
-                </div>
+              <p className="text-xs text-gray-600 mt-3">
+                {new Date(project.startDate).toLocaleDateString()} –{" "}
+                {new Date(project.endDate).toLocaleDateString()}
+              </p>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={() => setViewProject(project)}
+                  className="text-xs text-blue-500 hover:underline"
+                >
+                  View
+                </button>
+
+                <button
+                  onClick={() => setProjectToDelete(project)}
+                  className="text-xs text-red-500 hover:underline"
+                >
+                  Delete
+                </button>
               </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center space-y-3 pt-10">
-          <div className="w-20 h-20 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300">
-            <Cloud className="w-8 h-8 text-gray-400" />
-          </div>
-          <p className="text-sm font-medium text-gray-500">No projects found</p>
-        </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Confirm delete modal */}
+      {projectToDelete && (
+        <ConfirmActionModal
+          title="Delete project?"
+          description="This action will permanently delete this project and remove all members."
+          confirmText="Delete project"
+          loading={deleting}
+          onCancel={() => setProjectToDelete(null)}
+          onConfirm={handleDeleteConfirm}
+        />
       )}
-    </div>
+
+      {/* Project view/edit modal */}
+      {viewProject && (
+        <ProjectViewModal
+          project={viewProject}
+          onClose={() => setViewProject(null)}
+          onSave={handleUpdateProject}
+        />
+      )}
+    </section>
   );
 };
 
