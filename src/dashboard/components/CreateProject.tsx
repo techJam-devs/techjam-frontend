@@ -3,7 +3,7 @@
  */
 
 import { Plus, X } from "lucide-react";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import useToastStore from "../../store/notificationStore";
 import { createProjectService } from "../../services/projectService";
 
@@ -28,9 +28,6 @@ const CreateProjectButton = () => {
     projectData.description.trim() === ""
       ? 0
       : projectData.description.trim().split(/\s+/).filter(Boolean).length;
-
-  const techInputRef = useRef<HTMLInputElement>(null);
-  const roleInputRef = useRef<HTMLInputElement>(null);
 
   // Get user input + control description input to max 100 words
   const handleInputChange = (
@@ -86,8 +83,9 @@ const CreateProjectButton = () => {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 relative mx-4 transition-all duration-500">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm p-4">
+          <div className="relative mx-auto w-full max-w-lg bg-white rounded-2xl shadow-lg p-6
+                  md:mt-24 md:mb-24">
             <button
               onClick={() => setOpen(false)}
               className="absolute top-3 right-3 text-gray-500 hover:text-black transition"
@@ -101,7 +99,7 @@ const CreateProjectButton = () => {
               {/* Project Title */}
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Project Title
+                  Project Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -117,13 +115,15 @@ const CreateProjectButton = () => {
               {/* Tech Stack */}
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Tech Stack
+                  Tech Stack <span className="text-red-500">*</span>
                 </label>
-                <div className="flex flex-wrap gap-2 mb-2">
+
+                {/* Display tags */}
+                <div className="flex flex-wrap gap-2 mb-2 max-h-40 overflow-y-auto">
                   {projectData.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full flex items-center gap-1 text-xs"
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1 text-sm"
                     >
                       {tech}
                       <button
@@ -134,50 +134,49 @@ const CreateProjectButton = () => {
                             techStack: prev.techStack.filter((t) => t !== tech),
                           }))
                         }
-                        className="text-blue-600 hover:text-blue-900 font-bold"
+                        className="text-blue-600 hover:text-blue-900 p-1 rounded-full"
                       >
                         ×
                       </button>
                     </span>
                   ))}
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    ref={techInputRef}
-                    type="text"
-                    value={techInput}
-                    onChange={(e) => setTechInput(e.target.value)}
-                    placeholder="Add a tech (e.g. React)"
-                    className="flex-1 border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
+
+                {/* Input for adding tech */}
+                <input
+                  type="text"
+                  value={techInput}
+                  onChange={(e) => setTechInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === ",") {
+                      e.preventDefault();
                       const value = techInput.trim();
-                      if (!value || projectData.techStack.includes(value))
-                        return;
+                      if (!value || projectData.techStack.includes(value)) return;
                       setProjectData((prev) => ({
                         ...prev,
                         techStack: [...prev.techStack, value],
                       }));
                       setTechInput("");
-                      techInputRef.current?.focus(); // Auto-focus for mobile/desktop
-                    }}
-                    className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-                  >
-                    +
-                  </button>
-                </div>
+                    }
+                  }}
+                  placeholder="Type tech and press Enter or comma"
+                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
               </div>
+
 
               {/* Roles */}
               <div>
-                <label className="block text-sm font-medium mb-1">Roles</label>
-                <div className="flex flex-wrap gap-2 mb-2">
+                <label className="block text-sm font-medium mb-1">
+                  Roles <span className="text-red-500">*</span>
+                </label>
+
+                {/* Display role tags */}
+                <div className="flex flex-wrap gap-2 mb-2 max-h-40 overflow-y-auto">
                   {projectData.requiredRoles.map((role) => (
                     <span
                       key={role}
-                      className="bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center gap-1 text-xs"
+                      className="bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-1 text-sm"
                     >
                       {role}
                       <button
@@ -185,51 +184,44 @@ const CreateProjectButton = () => {
                         onClick={() =>
                           setProjectData((prev) => ({
                             ...prev,
-                            requiredRoles: prev.requiredRoles.filter(
-                              (r) => r !== role,
-                            ),
+                            requiredRoles: prev.requiredRoles.filter((r) => r !== role),
                           }))
                         }
-                        className="text-green-600 hover:text-green-900 font-bold"
+                        className="text-green-600 hover:text-green-900 p-1 rounded-full"
                       >
                         ×
                       </button>
                     </span>
                   ))}
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    ref={roleInputRef}
-                    type="text"
-                    value={roleInput}
-                    onChange={(e) => setRoleInput(e.target.value)}
-                    placeholder="Add a role (e.g. Project Manager)"
-                    className="flex-1 border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
+
+                {/* Input for adding roles */}
+                <input
+                  type="text"
+                  value={roleInput}
+                  onChange={(e) => setRoleInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === ",") {
+                      e.preventDefault();
                       const value = roleInput.trim();
-                      if (!value || projectData.requiredRoles.includes(value))
-                        return;
+                      if (!value || projectData.requiredRoles.includes(value)) return;
                       setProjectData((prev) => ({
                         ...prev,
                         requiredRoles: [...prev.requiredRoles, value],
                       }));
                       setRoleInput("");
-                      roleInputRef.current?.focus(); // Auto-focus for mobile/desktop
-                    }}
-                    className="bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 transition"
-                  >
-                    +
-                  </button>
-                </div>
+                    }
+                  }}
+                  placeholder="Type role and press Enter or comma"
+                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                />
               </div>
+
 
               {/* Description */}
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Description
+                  Description <span className="text-red-500">*</span>
                 </label>
                 <p
                   className={`text-xs ${wordsCount === 100 ? "text-red-500 font-medium" : "text-gray-400"}`}
@@ -249,7 +241,7 @@ const CreateProjectButton = () => {
               {/* Experience */}
               <div>
                 <label className="block text-sm font-medium mb-1">
-                  Experience
+                  Experience <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -265,7 +257,7 @@ const CreateProjectButton = () => {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs md:text-sm text-gray-600 mb-1">
-                    Start Date
+                    Start Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"
@@ -277,7 +269,7 @@ const CreateProjectButton = () => {
                 </div>
                 <div>
                   <label className="block text-xs md:text-sm text-gray-600 mb-1">
-                    End Date
+                    End Date <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="date"

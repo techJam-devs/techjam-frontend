@@ -35,7 +35,7 @@ const MobileMenu = () => {
 
       {/** Menu display */}
       {show && (
-        <div className="absolute top-0 left-0 w-full bg-gray-50 flex flex-col items-center gap-6 py-4 transition-all duration-500 ease-out">
+        <div className="absolute top-0 left-0 w-full bg-gray-50 flex flex-col items-center gap-6 p-4 pb-20 transition-all duration-500 ease-out">
           {/** logo + close menu */}
           <div className="grid grid-cols-3 items-center w-full p-4 mt-4">
             {/* Logo */}
@@ -78,8 +78,8 @@ const MobileMenu = () => {
           {/** Login btn */}
           <Button
             text="Log in"
-            variant="ghost"
-            className="border-none"
+            variant="secondary"
+            className="w-full"
             size="lg"
             onClick={() => setOpenModal("signIn")}
           />

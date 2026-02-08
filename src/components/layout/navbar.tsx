@@ -32,78 +32,79 @@ const Navbar = () => {
   ];
 
   return (
-    <header
-      className={`fixed top-0 w-full bg-gray-50 z-50 ${scrolled ? "bg-blue border-b-2 border-gray-200 shadow-sm" : " border-b-0"}`}
-    >
-      <nav className="relative container mx-auto flex items-center justify-between px-4 lg:px-8 py-2">
-        {/* Logo */}
-        <div className="flex items-center">
-          <img
-            src="/logo.png"
-            alt="logo"
-            className="h-10 md:h-12 w-auto object-contain relative top-[1px]"
-          />
-        </div>
+   <header className="relative">
+      <div
+        className={`fixed top-0 w-full bg-gray-50 z-50 ${scrolled ? "bg-blue border-b-2 border-gray-200 shadow-sm" : " border-b-0"}`}
+      >
+        <nav className="container mx-auto flex items-center justify-between px-4 lg:px-8 py-2">
+          {/* Logo */}
+          <div className="flex items-center">
+            <img
+              src="/logo.png"
+              alt="logo"
+              className="h-10 md:h-12 w-auto object-contain relative top-[1px]"
+            />
+          </div>
 
-        {/* Middle content */}
-        <div className="hidden lg:flex items-center gap-6 py-1">
-          <ul className="flex gap-6 items-center">
-            {navlink.map((n) => (
-              <li
-                key={n.title}
-                className="text-sm text-gray-700 font-medium hover:text-blue transition-colors"
-              >
-                <NavLink
-                  to={n.link}
-                  className={({ isActive }) =>
-                    `text-sm transition-colors duration-200 ${
-                      isActive
+          {/* Middle content */}
+          <div className="hidden xl:flex items-center gap-6 py-1">
+            <ul className="flex gap-6 items-center">
+              {navlink.map((n) => (
+                <li
+                  key={n.title}
+                  className="text-sm text-gray-700 font-medium hover:text-blue transition-colors"
+                >
+                  <NavLink
+                    to={n.link}
+                    className={({ isActive }) =>
+                      `text-sm transition-colors duration-200 ${isActive
                         ? "text-black font-semibold"
                         : "text-gray-700 hover:text-blue"
-                    }`
-                  }
-                >
-                  {n.title}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-          <SearchBar />
-        </div>
+                      }`
+                    }
+                  >
+                    {n.title}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+            <SearchBar />
+          </div>
 
-        {/* CTA buttons  login + sign up*/}
-        <div className="hidden lg:flex items-center gap-3 py-1">
-          <Button
-            text="Log in"
-            variant="ghost"
-            size="sm"
-            className="border-none"
-            onClick={() => setOpenModal("signIn")}
-          />
+          {/* CTA buttons  login + sign up*/}
+          <div className="hidden xl:flex items-center gap-3 py-1">
+            <Button
+              text="Log in"
+              variant="secondary"
+              size="sm"
+              className="secondary"
+              onClick={() => setOpenModal("signIn")}
+            />
 
-          {/** sign up button */}
-          <Button
-            text="Get Started"
-            variant="primary"
-            size="sm"
-            onClick={() => setOpenModal("signUp")}
-          />
-        </div>
+            {/** sign up button */}
+            <Button
+              text="Get Started"
+              variant="primary"
+              size="sm"
+              onClick={() => setOpenModal("signUp")}
+            />
+          </div>
 
-        {/* Mobile menu */}
-        <div className="lg:hidden">
-          <MobileMenu />
-        </div>
-      </nav>
+          {/* Mobile menu */}
+          <div className="xl:hidden">
+            <MobileMenu />
+          </div>
+        </nav>
 
-      {/** Modal */}
-      <Modal
-        isOpen={!!openModal}
-        onClose={() => setOpenModal(null)}
-        switchPortal={openModal ?? "signIn"}
-        onSwitch={setOpenModal}
-      />
-    </header>
+        {/** Modal */}
+        <Modal
+          isOpen={!!openModal}
+          onClose={() => setOpenModal(null)}
+          switchPortal={openModal ?? "signIn"}
+          onSwitch={setOpenModal}
+        />
+      </div>
+   </header>
   );
 };
 
