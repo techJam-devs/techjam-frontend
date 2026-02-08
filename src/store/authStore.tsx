@@ -82,9 +82,14 @@ const useAuthstore = create<AuthState>((set) => ({
 
   // Log out
   logout: async (): Promise<LogoutResponse> => {
-    const response = await LogoutService();
-    set({ user: null });
-    return response;
+    try {
+      const res = await LogoutService();
+      set({ user: null });
+      return res;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      throw new Error(message);
+    }
   },
 }));
 

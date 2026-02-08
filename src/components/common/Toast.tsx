@@ -9,9 +9,9 @@ import type { ToastType } from "../../store/notificationStore";
 import { X } from "lucide-react";
 
 const typeColors: Record<ToastType, string> = {
-  success: "bg-green-500",
-  error: "bg-red-500",
-  info: "bg-yellow-500",
+  success: "bg-green-100 text-green-700",
+  error: "bg-red-100 text-red-700",
+  info: "bg-yellow-100 text-yellow-700",
 };
 
 const Toast: React.FC = () => {
@@ -22,7 +22,7 @@ const Toast: React.FC = () => {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`flex items-center justify-between gap-4 text-white px-5 py-3 rounded-lg shadow-lg ${typeColors[toast.type]} animate-notification-fade-in`}
+          className={`border-l-4 border-${typeColors[toast.type]} flex items-center justify-between gap-4 px-5 py-3 rounded-lg shadow-lg ${typeColors[toast.type]} animate-notification-fade-in`}
         >
           <span>{toast.message}</span>
           <button onClick={() => removeToast(toast.id)}>

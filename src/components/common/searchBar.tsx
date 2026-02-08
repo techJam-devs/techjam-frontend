@@ -17,7 +17,7 @@ const SearchBar = () => {
   return (
     <form
       onSubmit={handleSearch}
-      className="relative flex items-center gap-2 bg-gray-100 rounded-full px-8 py-2 transition-all duration-300"
+      className="relative w-full xl:w-auto flex items-center gap-2 bg-gray-100 rounded-full px-8 py-2 transition-all duration-300"
     >
       {/* Mobile toggle for search input */}
       <button type="button">

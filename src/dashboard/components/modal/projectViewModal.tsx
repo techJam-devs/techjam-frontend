@@ -66,9 +66,10 @@ const ProjectViewModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-lg rounded-xl bg-white p-6 space-y-5 shadow-lg">
-        {/* Header */}
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 p-4">
+      <div className="relative mx-auto w-full max-w-lg bg-white rounded-xl p-6 space-y-5 shadow-lg
+                  md:mt-24 md:mb-24">
+        {/** header */}
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold">Project Details</h3>
           <button

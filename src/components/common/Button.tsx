@@ -9,7 +9,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   className?: string;
-  variant?: "primary" | "ghost";
+  variant?: "primary" | "ghost" | "secondary";
   icon?: React.ReactNode;
   size?: "sm" | "md" | "lg";
   disabled?: boolean;
@@ -32,8 +32,9 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
 }) => {
   const variants = {
-    primary: "bg-blue text-white hover:bg-blue-700",
-    ghost: "border border-blue text-blue hover:bg-blue hover:text-white",
+    primary: "bg-blue ring-1 ring-blue text-white hover:bg-blue-700",
+    ghost: "ring-1 ring-blue text-blue hover:bg-blue hover:text-white",
+    secondary: "text-blue ring- ring-blue/50 hover:bg-blue hover:text-white transition-colors duration-200",
   };
 
   const baseStyles =
