@@ -1,17 +1,43 @@
 /**
  *
- * @returns  newsletter component
+ * @returns  newsletter component for the landing page
  */
 
 import { Mail } from "lucide-react";
 import React, { useState } from "react";
+import { subscribeToNewsletterService } from "../../services/newsletterService";
+import useToastStore from "../../store/notificationStore";
 
 const Newsletter = () => {
-  const [email, setEmail] = useState("");
+  const { addToast } = useToastStore();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string | "">("");
+
+  const noInput = email === "";
 
   // handle subscription for email
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+
+    const result = await subscribeToNewsletterService(email);
+
+    if (result.success) {
+      addToast({
+        message:
+          result.message || "Please check your email to confirm subscription",
+        type: "success",
+      });
+      setEmail("");
+    } else {
+      console.error(result.message);
+      addToast({
+        message: result.message || "Unexpected error occurred. Try again later",
+        type: "error",
+      });
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -64,9 +90,10 @@ const Newsletter = () => {
             />
             <button
               type="submit"
-              className="absolute right-2 -bottom-4 md:bottom-0 bg-gray-900 text-white py-4 px-8 uppercase text-sm"
+              disabled={loading || noInput}
+              className="absolute right-2 -bottom-4 md:bottom-0 bg-gray-900 text-white py-4 px-8 uppercase text-sm hover:bg-gray-700 transition-colors duration-500 cursor-pointer disabled:cursor-not-allowed"
             >
-              Subscribe
+              {loading ? "Subscribing...⌛" : " Subscribe"}
             </button>
           </form>
         </div>

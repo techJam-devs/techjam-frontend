@@ -5,7 +5,7 @@ import { getInitials } from "../../../utils/getInitials";
 interface RequestDetailsModalProps {
   isOpen: boolean;
   project: projectRequest;
-  user: projectRequest["joinRequests"][0];
+  user: projectRequest["joinRequests"][0]["user"];
   onClose: () => void;
   onAccept: () => void;
   onDecline: () => void;

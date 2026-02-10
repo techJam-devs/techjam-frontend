@@ -44,15 +44,17 @@ const ProjectDetailsModal = ({
 
         {/* Description & Duration */}
         <p className="text-sm text-gray-600">{project.description}</p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-800 font-bold">
           📆 Duration:{" "}
-          <span className="font-medium">
+          <span className="font-medium text-gray-500">
             {start} – {end}
           </span>
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-800 font-bold">
           🚀 Tech Stack:{" "}
-          <span className="font-medium">{project.techStack.join(", ")}</span>
+          <span className="font-medium text-gray-500">
+            {project.techStack.join(", ")}
+          </span>
         </p>
 
         {/* Team Members */}
@@ -108,7 +110,7 @@ const ProjectDetailsModal = ({
         <div className="pt-4 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm rounded border hover:bg-gray-100 transition"
+            className="px-4 py-2 text-sm rounded border hover:bg-gray-100 transition-all cursor-pointer"
           >
             Close
           </button>
@@ -132,13 +134,13 @@ const ProjectDetailsModal = ({
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setConfirmLeave(false)}
-                className="px-3 py-1 text-sm rounded border hover:bg-gray-100 transition"
+                className="px-3 py-1 text-sm rounded border hover:bg-gray-100 transition cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmLeave}
-                className="px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700 transition"
+                className="px-3 py-1 text-sm rounded bg-red-600 text-white hover:bg-red-700 transitio cursor-pointern"
               >
                 Yes, Leave
               </button>

@@ -6,7 +6,7 @@
 import TeamMembers from "./TeamMembers";
 import type { Project } from "../../types/projects.types";
 import { joinProjectRequestService } from "../../services/projectService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useToastStore from "../../store/notificationStore";
 import { Bookmark } from "lucide-react";
 import {
@@ -51,7 +51,7 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({
 }) => {
   const { addToast } = useToastStore();
   const [loading, setLoading] = useState<boolean>(false);
-  const [isSaved, setIsSaved] = useState<boolean>(initialIsSaved);
+  const [isSaved, setIsSaved] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
 
   const start = new Date(startDate);
@@ -61,6 +61,10 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({
     month: "short",
     day: "numeric",
   });
+
+  useEffect(() => {
+    setIsSaved(initialIsSaved);
+  }, [initialIsSaved]);
 
   // ============ send request to join =======
   const sendRequest = async () => {
@@ -121,15 +125,15 @@ const BestMatchCard: React.FC<BestMatchCardProps> = ({
             type="button"
             onClick={toggleSave}
             aria-label="Save project"
-            className="transition"
+            className="transition-all cursor-pointer"
             title="Save project"
           >
             <Bookmark
               size={18}
               className={
                 isSaved
-                  ? "fill-blue text-blue"
-                  : "text-gray-400 hover:text-blue"
+                  ? "fill-blue stroke-blue"
+                  : "fill-none stroke-gray-400 hover:stroke-blue"
               }
             />
           </button>

@@ -32,7 +32,7 @@ const Navbar = () => {
   ];
 
   return (
-   <header className="relative">
+    <header className="relative">
       <div
         className={`fixed top-0 w-full bg-gray-50 z-50 ${scrolled ? "bg-blue border-b-2 border-gray-200 shadow-sm" : " border-b-0"}`}
       >
@@ -57,9 +57,10 @@ const Navbar = () => {
                   <NavLink
                     to={n.link}
                     className={({ isActive }) =>
-                      `text-sm transition-colors duration-200 ${isActive
-                        ? "text-black font-semibold"
-                        : "text-gray-700 hover:text-blue"
+                      `text-sm transition-colors duration-200 ${
+                        isActive
+                          ? "text-black font-semibold"
+                          : "text-gray-700 hover:text-blue"
                       }`
                     }
                   >
@@ -104,7 +105,7 @@ const Navbar = () => {
           onSwitch={setOpenModal}
         />
       </div>
-   </header>
+    </header>
   );
 };
 

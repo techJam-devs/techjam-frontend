@@ -71,6 +71,34 @@ const CreateProjectButton = () => {
     }
   };
 
+  {
+    /* Add tech */
+  }
+  const addTech = () => {
+    const value = techInput.trim();
+    if (!value || projectData.techStack.includes(value)) return;
+
+    setProjectData((prev) => ({
+      ...prev,
+      techStack: [...prev.techStack, value],
+    }));
+    setTechInput("");
+  };
+
+  {
+    /* Add role */
+  }
+  const addRole = () => {
+    const value = roleInput.trim();
+    if (!value || projectData.requiredRoles.includes(value)) return;
+
+    setProjectData((prev) => ({
+      ...prev,
+      requiredRoles: [...prev.requiredRoles, value],
+    }));
+    setRoleInput("");
+  };
+
   return (
     <>
       <button
@@ -83,9 +111,11 @@ const CreateProjectButton = () => {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm p-4">
-          <div className="relative mx-auto w-full max-w-lg bg-white rounded-2xl shadow-lg p-6
-                  md:mt-24 md:mb-24">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm p-4 pb-8">
+          <div
+            className="relative mx-auto w-full max-w-lg bg-white rounded-2xl shadow-lg p-6
+                  md:mt-24 md:mb-24"
+          >
             <button
               onClick={() => setOpen(false)}
               className="absolute top-3 right-3 text-gray-500 hover:text-black transition"
@@ -107,7 +137,7 @@ const CreateProjectButton = () => {
                   value={projectData.title}
                   onChange={handleInputChange}
                   placeholder="Enter project name"
-                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   required
                 />
               </div>
@@ -123,7 +153,7 @@ const CreateProjectButton = () => {
                   {projectData.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1 text-sm"
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-1 text-xs"
                     >
                       {tech}
                       <button
@@ -148,22 +178,16 @@ const CreateProjectButton = () => {
                   value={techInput}
                   onChange={(e) => setTechInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === ",") {
+                    if (e.key === "Enter") {
                       e.preventDefault();
-                      const value = techInput.trim();
-                      if (!value || projectData.techStack.includes(value)) return;
-                      setProjectData((prev) => ({
-                        ...prev,
-                        techStack: [...prev.techStack, value],
-                      }));
-                      setTechInput("");
+                      addTech();
                     }
                   }}
-                  placeholder="Type tech and press Enter or comma"
-                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onBlur={addTech}
+                  placeholder="Type tech and press Enter or Done"
+                  className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
-
 
               {/* Roles */}
               <div>
@@ -176,7 +200,7 @@ const CreateProjectButton = () => {
                   {projectData.requiredRoles.map((role) => (
                     <span
                       key={role}
-                      className="bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-1 text-sm"
+                      className="bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-1 text-xs"
                     >
                       {role}
                       <button
@@ -184,7 +208,9 @@ const CreateProjectButton = () => {
                         onClick={() =>
                           setProjectData((prev) => ({
                             ...prev,
-                            requiredRoles: prev.requiredRoles.filter((r) => r !== role),
+                            requiredRoles: prev.requiredRoles.filter(
+                              (r) => r !== role,
+                            ),
                           }))
                         }
                         className="text-green-600 hover:text-green-900 p-1 rounded-full"
@@ -201,22 +227,16 @@ const CreateProjectButton = () => {
                   value={roleInput}
                   onChange={(e) => setRoleInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === ",") {
+                    if (e.key === "Enter") {
                       e.preventDefault();
-                      const value = roleInput.trim();
-                      if (!value || projectData.requiredRoles.includes(value)) return;
-                      setProjectData((prev) => ({
-                        ...prev,
-                        requiredRoles: [...prev.requiredRoles, value],
-                      }));
-                      setRoleInput("");
+                      addRole();
                     }
                   }}
-                  placeholder="Type role and press Enter or comma"
-                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  onBlur={addRole}
+                  placeholder="Type role and press Enter or Done"
+                  className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none"
                 />
               </div>
-
 
               {/* Description */}
               <div>
@@ -234,7 +254,7 @@ const CreateProjectButton = () => {
                   onChange={handleInputChange}
                   rows={3}
                   placeholder="Short project description..."
-                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -249,7 +269,7 @@ const CreateProjectButton = () => {
                   value={projectData.experience}
                   onChange={handleInputChange}
                   placeholder="Experience (e.g. 2+ yrs)"
-                  className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -264,7 +284,7 @@ const CreateProjectButton = () => {
                     name="startDate"
                     value={projectData.startDate}
                     onChange={handleInputChange}
-                    className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -276,7 +296,7 @@ const CreateProjectButton = () => {
                     name="endDate"
                     value={projectData.endDate}
                     onChange={handleInputChange}
-                    className="w-full border text-sm border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border text-xs border-gray-300 bg-gray-50 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -293,7 +313,7 @@ const CreateProjectButton = () => {
                     value={projectData.link}
                     onChange={handleInputChange}
                     placeholder="Link to Trello, Notion, etc."
-                    className="flex-1 text-sm bg-transparent focus:outline-none"
+                    className="flex-1 text-xs bg-transparent focus:outline-none"
                   />
                 </div>
               </div>
@@ -303,7 +323,7 @@ const CreateProjectButton = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-500 text-white font-medium py-2 px-8 rounded-full hover:bg-blue-600 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                  className="bg-blue-500 text-sm text-white font-medium py-2 px-8 rounded-full hover:bg-blue-600 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? "Creating ...⌛" : "Create Project"}
                 </button>

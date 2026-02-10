@@ -151,7 +151,7 @@ const ContactUs = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue text-white py-2.5 text-sm rounded-lg font-semibold hover:bg-blue-800 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="w-full bg-blue text-white py-2.5 text-sm rounded-lg font-semibold hover:bg-blue-800 transition disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
               >
                 {loading ? "Sending..." : "Send Message"}
               </button>

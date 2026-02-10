@@ -65,10 +65,38 @@ const ProjectViewModal = ({
     onSave(updatedProject);
   };
 
+  // Compare current state with original project to check if anything changed
+  const isChanged = () => {
+    return (
+      title.trim() !== project.title ||
+      description.trim() !== project.description ||
+      status !== (project.status ?? "available") ||
+      startDate !== toInputDate(project.startDate) ||
+      endDate !== toInputDate(project.endDate) ||
+      techStack
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean)
+        .join(",") !==
+        (Array.isArray(project.techStack) ? project.techStack.join(",") : "") ||
+      requiredRoles
+        .split(",")
+        .map((r) => r.trim())
+        .filter(Boolean)
+        .join(",") !==
+        (Array.isArray(project.requiredRoles)
+          ? project.requiredRoles.join(",")
+          : "") ||
+      (link.trim() || "") !== (project.link || "")
+    );
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 p-4">
-      <div className="relative mx-auto w-full max-w-lg bg-white rounded-xl p-6 space-y-5 shadow-lg
-                  md:mt-24 md:mb-24">
+      <div
+        className="relative mx-auto w-full max-w-lg bg-white rounded-xl p-6 space-y-5 shadow-lg
+                  md:mt-24 md:mb-24"
+      >
         {/** header */}
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold">Project Details</h3>
@@ -232,14 +260,19 @@ const ProjectViewModal = ({
           <button
             onClick={onClose}
             type="button"
-            className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-100"
+            className="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-100 cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             type="button"
-            className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+            disabled={!isChanged()}
+            className={`px-4 py-2 text-sm rounded text-white ${
+              isChanged()
+                ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                : "bg-blue-300 cursor-not-allowed"
+            }`}
           >
             Save Changes
           </button>

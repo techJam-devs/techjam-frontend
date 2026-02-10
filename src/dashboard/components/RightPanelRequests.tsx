@@ -1,3 +1,7 @@
+/**
+ * @description This is the request component. accept, reject, view all in coming request
+ */
+
 import { useEffect, useState } from "react";
 import {
   acceptRequestService,
@@ -17,7 +21,7 @@ const RequestPanel = () => {
     null,
   );
   const [selectedUser, setSelectedUser] = useState<
-    projectRequest["joinRequests"][0] | null
+    projectRequest["joinRequests"][0]["user"] | null
   >(null);
 
   // Fetch requests
@@ -25,6 +29,7 @@ const RequestPanel = () => {
     const fetchAllRequest = async () => {
       const res = await viewAllRequestService();
       setProjectRequests(res.projects);
+      console.log(res.projects);
     };
     fetchAllRequest();
   }, []);
@@ -38,7 +43,7 @@ const RequestPanel = () => {
             ? {
                 ...project,
                 joinRequests: project.joinRequests.filter(
-                  (u) => u._id !== userId,
+                  (jr) => jr.user._id !== userId,
                 ),
               }
             : project,
@@ -47,7 +52,7 @@ const RequestPanel = () => {
     );
   };
 
-  // Actions
+  // Accept request
   const acceptRequest = async () => {
     if (!selectedProject || !selectedUser) return;
 
@@ -65,6 +70,7 @@ const RequestPanel = () => {
     }
   };
 
+  // Decline request
   const declineRequest = async () => {
     if (!selectedProject || !selectedUser) return;
 
@@ -84,7 +90,7 @@ const RequestPanel = () => {
 
   const openModal = (
     project: projectRequest,
-    user: projectRequest["joinRequests"][0],
+    user: projectRequest["joinRequests"][0]["user"],
   ) => {
     setSelectedProject(project);
     setSelectedUser(user);
@@ -102,34 +108,38 @@ const RequestPanel = () => {
       {projectRequests.length ? (
         projectRequests.map((project) => (
           <div key={project._id} className="mb-4">
-            {project.joinRequests.map((user) => (
-              <div
-                key={user._id}
-                onClick={() => openModal(project, user)}
-                className="flex items-center justify-between p-3 bg-white border-2 border-border-color shadow cursor-pointer hover:bg-gray-50 transition hover:shadow-xl"
-              >
-                <div className="flex items-center gap-3">
-                  {user.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold">
-                      {getInitials(user.name)}
-                    </div>
-                  )}
+            {project.joinRequests.map((jr) => {
+              const user = jr.user;
+              if (!user) return null;
+              return (
+                <div
+                  key={user._id}
+                  onClick={() => openModal(project, user)}
+                  className="flex items-center justify-between p-3 bg-white border-2 border-border-color shadow cursor-pointer hover:bg-gray-50 transition hover:shadow-xl"
+                >
+                  <div className="flex items-center gap-3">
+                    {user.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-sm font-semibold">
+                        {getInitials(user.name)}
+                      </div>
+                    )}
 
-                  <div>
-                    <p className="font-semibold text-sm">{user.name}</p>
-                    <p className="text-xs text-gray-500">
-                      {user.role ?? "N/A"} • {project.title}
-                    </p>
+                    <div>
+                      <p className="font-semibold text-sm">{user.name}</p>
+                      <p className="text-xs text-gray-500">
+                        {user.role ?? "N/A"} • {project.title}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ))
       ) : (
