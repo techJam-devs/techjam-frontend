@@ -35,6 +35,7 @@ export interface Project {
   creator: User;
   status: "available" | "in-progress" | "completed" | "cancelled";
   teamMembers: ProjectTeamMember[];
+  isBookmarked?: boolean;
   joinRequests: string[];
   createdAt: string;
   updatedAt: string;
@@ -85,10 +86,14 @@ export interface projectRequest {
   title: string;
   joinRequests: {
     _id: string;
-    name: string;
-    username: string;
-    avatar: string;
-    role?: string;
+    user: {
+      _id: string;
+      name: string;
+      username: string;
+      avatar: string;
+      role?: string;
+    };
+    createdAt: string;
   }[];
 }
 

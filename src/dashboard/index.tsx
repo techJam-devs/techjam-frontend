@@ -82,7 +82,11 @@ const Index = () => {
           {/* Projects grid */}
           <div className="grid md:grid-cols-2 gap-4">
             {projects.map((project) => (
-              <BestMatchCard key={project._id} {...project} />
+              <BestMatchCard
+                key={project._id}
+                {...project}
+                initialIsSaved={project.isBookmarked}
+              />
             ))}
           </div>
 

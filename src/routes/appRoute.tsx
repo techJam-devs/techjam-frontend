@@ -11,6 +11,7 @@ import NotFound from "../pages/NotFound";
 import AppLayout from "../components/layout/appLayout";
 import ResetPassword from "../pages/ResetPassword";
 import PublicRouteGuard from "./Guard/PublicRouteGuard";
+import ConfirmNewsletterSubscription from "../pages/ConfirmNewsletterSubscription";
 
 const AppRoute = () => {
   return (
@@ -30,6 +31,10 @@ const AppRoute = () => {
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
+      <Route
+        path="/newsletter/confirm"
+        element={<ConfirmNewsletterSubscription />}
+      />
     </Routes>
   );
 };

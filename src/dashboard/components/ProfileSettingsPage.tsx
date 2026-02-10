@@ -116,8 +116,8 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center md:p-4 overflow-y-auto">
-      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-xl max-h-[100vh] overflow-y-auto">
+    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-xl mt-6 max-h-[100vh] overflow-y-auto">
         {/* Close */}
         <button
           onClick={onClose}
@@ -125,7 +125,6 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
         >
           <X className="w-5 h-5" />
         </button>
-
 
         {/* Banner */}
         <div
@@ -137,7 +136,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end gap-6 -mt-10 py-3">
             {/* Avatar */}
-            <div className="relative w-32 h-32 rounded-full border-4 border-white bg-gray-200 overflow-hidden">
+            <div className="relative w-28 h-28 rounded-full border-4 border-white bg-gray-200 overflow-hidden">
               {avatarPreview || user.avatar ? (
                 <img
                   src={avatarPreview || user.avatar}
@@ -169,15 +168,15 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-2 right-2 bg-black/70 p-2 rounded-full text-white hover:bg-black"
+                className="absolute bottom-2 right-0 bg-black/70 p-2 rounded-full text-white hover:bg-black"
               >
                 <Camera className="w-4 h-4" />
               </button>
             </div>
 
             {/* Name & Email + location */}
-            <div className="pb-2 space-y-1">
-              <h2 className="text-2xl font-semibold">{user.name}</h2>
+            <div className="pb-2 pt-8  space-y-1">
+              <h2 className="text-lg font-semibold">{user.name}</h2>
               <p className="text-sm font-medium text-gray-600">
                 {user.role || "No Role set"}
               </p>
@@ -200,7 +199,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                 type="text"
                 value={user.name}
                 readOnly
-                className="w-full text-sm p-2 rounded-lg text-gray-400 border-gray-300 bg-gray-50 cursor-not-allowed"
+                className="w-full bg-gray-100 text-sm p-2 rounded-lg text-gray-400 border-gray-300 cursor-not-allowed"
               />
             </div>
 
@@ -214,7 +213,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="your_username"
-                className="w-full p-2 rounded-lg text-sm border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                className="w-full p-2 rounded-lg text-sm bg-gray-100 border-gray-300 focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <div>
@@ -226,7 +225,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 placeholder="e.g. Software Engineer"
-                className="w-full p-2 rounded-lg text-sm border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                className="w-full p-2 rounded-lg text-sm bg-gray-100 border-gray-300 focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -240,7 +239,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                   type="email"
                   value={user.email}
                   readOnly
-                  className="w-full p-2 text-sm rounded-lg text-gray-400 border-gray-300 bg-gray-50 cursor-not-allowed"
+                  className="w-full p-2 bg-gray-100 text-sm rounded-lg text-gray-400 border-gray-300 cursor-not-allowed"
                 />
                 {user.isEmailVerified && (
                   <span className="flex items-center gap-1 text-xs text-green-700 bg-green-100 md:px-3 py-1 rounded-full font-medium">
@@ -261,7 +260,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="City, Country"
-                className="w-full text-sm p-2 rounded-lg border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                className="w-full bg-gray-100 text-sm p-2 rounded-lg border-gray-300 focus:ring-2 focus:ring-indigo-500"
               />
             </div>
           </div>
@@ -276,7 +275,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
               onChange={(e) => setBio(e.target.value)}
               maxLength={160}
               rows={5}
-              className="w-full text-sm rounded-lg bg-gray-100 p-2 border-gray-300 focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-gray-100 text-sm rounded-lg p-2 border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -285,7 +284,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
             {!loading && (
               <button
                 onClick={onClose}
-                className={`px-5 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100`}
+                className={`px-5 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm hover:bg-gray-100`}
               >
                 Cancel
               </button>
@@ -293,7 +292,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
             <button
               onClick={handleSave}
               disabled={loading || !hasChanges}
-              className={`px-5 py-2 rounded-lg ${loading || !hasChanges ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue text-white hover:bg-indigo-700"}`}
+              className={`px-5 py-2 rounded-lg ${loading || !hasChanges ? "bg-gray-200 text-gray-400 text-sm cursor-not-allowed" : "bg-blue text-white hover:bg-indigo-700"}`}
             >
               {loading ? "Updating profile..." : "Save changes"}
             </button>

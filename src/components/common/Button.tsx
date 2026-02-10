@@ -34,7 +34,8 @@ const Button: React.FC<ButtonProps> = ({
   const variants = {
     primary: "bg-blue ring-1 ring-blue text-white hover:bg-blue-700",
     ghost: "ring-1 ring-blue text-blue hover:bg-blue hover:text-white",
-    secondary: "text-blue ring- ring-blue/50 hover:bg-blue hover:text-white transition-colors duration-200",
+    secondary:
+      "text-blue ring- ring-blue/50 hover:bg-blue hover:text-white transition-colors duration-200",
   };
 
   const baseStyles =
@@ -47,7 +48,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? disabledStyles : ""} ${className || ""}`}
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? disabledStyles : ""} ${className || ""} cursor-pointer`}
     >
       {icon && <span className="text-sm">{icon}</span>} {text}
     </button>

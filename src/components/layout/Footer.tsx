@@ -21,9 +21,9 @@ const Footer = () => {
       title: "Product",
       links: [
         { name: "Home", path: "/" },
-        { name: "About us", path: "/about" },
+        { name: "About us", path: "/about-us" },
         { name: "Services", path: "/services" },
-        { name: "Contact us", path: "/contact" },
+        { name: "Contact us", path: "/contact-us" },
       ],
     },
     {

@@ -40,7 +40,7 @@ const ProfileSettingsDropDown = ({
   };
 
   return (
-    <div className="absolute right-2 mt-2 w-45 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+    <div className="absolute right-2 mt-2 w-45 bg-white border border-gray-200 rounded-lg shadow-lg z-[100] overflow-hidden">
       <div className="h-16 bg-gray-800 flex items-center justify-center">
         <div className="w-12 h-12 rounded-full border-2 border-white bg-gray-300 flex items-center justify-center text-white font-bold text-lg">
           {user.avatar ? (
