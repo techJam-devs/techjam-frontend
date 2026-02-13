@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@fontsource/lexend": "^5.2.11",
+    "@react-oauth/google": "^0.13.4",
     "@tailwindcss/vite": "^4.1.14",
     "aos": "^2.3.4",
     "axios": "^1.12.2",

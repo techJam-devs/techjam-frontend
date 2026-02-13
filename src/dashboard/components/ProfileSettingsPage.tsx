@@ -118,81 +118,79 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
   return (
     <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-xl mt-6 max-h-[100vh] overflow-y-auto">
-        {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-[110] text-white bg-black/80 hover:bg-black p-2 rounded-full flex items-center justify-center"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
         {/* Banner */}
         <div
-          className="h-40 w-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${profileBanner})` }}
-        />
-
-        <div className="relative px-6 pb-6">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-end gap-6 -mt-10 py-3">
-            {/* Avatar */}
-            <div className="relative w-28 h-28 rounded-full border-4 border-white bg-gray-200 overflow-hidden">
-              {avatarPreview || user.avatar ? (
-                <img
-                  src={avatarPreview || user.avatar}
-                  alt="avatar"
-                  className={`w-full h-full object-cover ${
-                    isUploadingAvatar ? "opacity-70" : ""
+          className="relative h-28 md:h-40 w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${profileBanner})` }}>
+          {/* Close */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-[110] text-white bg-black/80 hover:bg-black p-2 rounded-full flex items-center justify-center"
+          >
+            <X size={14} />
+          </button>
+        </div>
+        {/* Header */}
+        <div className="relative bg-red-20 flex items-start gap-3 -mt-9">
+          {/* Avatar */}
+          <div className="relative h-24 w-24 md:w-28 md:h-28 rounded-full border-4 border-white bg-gray-200 overflow-hidden">
+            {avatarPreview || user.avatar ? (
+              <img
+                src={avatarPreview || user.avatar}
+                alt="avatar"
+                className={`w-full h-full object-cover ${isUploadingAvatar ? "opacity-70" : ""
                   }`}
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-gray-700">
-                  {getInitials(user.name)}
-                </div>
-              )}
-
-              {isUploadingAvatar && (
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-medium">
-                  Uploading...
-                </div>
-              )}
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={handleAvatarChange}
               />
-
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-2 right-0 bg-black/70 p-2 rounded-full text-white hover:bg-black"
-              >
-                <Camera className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Name & Email + location */}
-            <div className="pb-2 pt-8  space-y-1">
-              <h2 className="text-lg font-semibold">{user.name}</h2>
-              <p className="text-sm font-medium text-gray-600">
-                {user.role || "No Role set"}
-              </p>
-
-              <div className="flex items-center gap-1 text-sm text-gray-500">
-                <MapPin className="w-4 h-4" />
-                <span>{user.location || "N/A"}</span>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-gray-700">
+                {getInitials(user.name)}
               </div>
-            </div>
+            )}
+
+            {isUploadingAvatar && (
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-medium">
+                Uploading...
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleAvatarChange}
+            />
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-2 right-0 bg-black/70 p-2 rounded-full text-white hover:bg-black"
+            >
+              <Camera className="w-4 h-4" />
+            </button>
           </div>
 
+          {/* Name & Role + location */}
+          <div className=" mt-8 p-2">
+            <h2 className="text-md md:text-lg font-semibold">{user.name}</h2>
+            <span className="text-xs md:text-sm font-medium text-gray-600">
+              {user.role || "N/A"}
+            </span>
+
+            <div className="flex items-center gap-1 text-xs md:text-sm text-gray-500">
+              <MapPin className="w-4 h-4" />
+              <span>{user.location || "N/A"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/** Form */}
+        <div className="relative mt-8 px-4 md:px-6 pb-6">
           {/* Form */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-600 mb-1">
                 Full name
               </label>
               <input
@@ -205,7 +203,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
 
             {/* Username */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-600 mb-1">
                 Username
               </label>
               <input
@@ -217,7 +215,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-600 mb-1">
                 Professional Role
               </label>
               <input
@@ -231,7 +229,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-600 mb-1">
                 Email
               </label>
               <div className="flex items-center gap-2">
@@ -252,7 +250,7 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-600 mb-1">
                 Location
               </label>
               <input
@@ -266,15 +264,15 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
           </div>
 
           {/* Bio */}
-          <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-400 mb-1">
               Bio (max 160 characters)
             </label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               maxLength={160}
-              rows={5}
+              rows={3}
               className="w-full bg-gray-100 text-sm rounded-lg p-2 border-gray-300 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
