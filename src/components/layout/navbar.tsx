@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import SearchBar from "../common/searchBar";
 import Button from "../common/Button";
 import MobileMenu from "../common/MobileMenu";
@@ -39,11 +39,17 @@ const Navbar = () => {
         <nav className="container mx-auto flex items-center justify-between px-4 lg:px-8 py-2">
           {/* Logo */}
           <div className="flex items-center">
-            <img
-              src="/logo.png"
-              alt="logo"
-              className="h-10 md:h-12 w-auto object-contain relative top-[1px]"
-            />
+            <Link
+              to="/"
+              className="cursor-pointer hover:opacity-80"
+              title="Home"
+            >
+              <img
+                src="/logo.png"
+                alt="logo"
+                className="h-10 md:h-12 w-auto object-contain relative top-[1px]"
+              />
+            </Link>
           </div>
 
           {/* Middle content */}

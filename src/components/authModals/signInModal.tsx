@@ -7,13 +7,13 @@ import FormWrapper from "../common/FormWrapper";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import Carousel from "../common/Carousel";
-import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { Code2, Globe, Twitter } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import useAuthStore from "../../store/authStore";
 import useToastStore from "../../store/notificationStore";
+import { GoogleButton } from "../oauth/GoogleOauth";
 
 type AuthPortal = "signIn" | "signUp" | "verifyEmail" | "forgetPassword";
 
@@ -148,12 +148,13 @@ const SignInModal: React.FC<SignInModalProps> = ({ onSwitch }) => {
         <div className="mt-6 text-center space-y-5">
           <p className="text-sm"> Or sign In with </p>
           <div className="flex justify-center items-center gap-8">
+            {/** Google sign in */}
+            <div className="flex justify-center">
+              <GoogleButton />
+            </div>
+
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              {" "}
-              <FcGoogle size={20} />{" "}
-            </span>
-            <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FaApple />
+              <FaApple size={22} />
             </span>
           </div>
         </div>

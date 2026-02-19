@@ -7,10 +7,10 @@ import FormWrapper from "../common/FormWrapper";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import Carousel from "../common/Carousel";
-import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { Code2, Lock, Twitter } from "lucide-react";
 import useAuthstore from "../../store/authStore";
+import { GoogleButton } from "../oauth/GoogleOauth";
 interface SignUpModalProps {
   onSwitch?: (portal: "signIn" | "signUp" | "verifyEmail") => void;
 }
@@ -151,11 +151,12 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ onSwitch }) => {
         <div className="text-center space-y-5 mt-6">
           <p className="text-sm">Or sign up with</p>
           <div className="flex justify-center items-center gap-8">
+            {/** Google sign in */}
+            <div className="flex justify-center">
+              <GoogleButton />
+            </div>
             <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FcGoogle size={20} />
-            </span>
-            <span className="border border-mute-gray p-3 rounded-full cursor-pointer">
-              <FaApple size={20} />
+              <FaApple size={22} />
             </span>
           </div>
         </div>
