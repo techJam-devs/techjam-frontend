@@ -24,7 +24,7 @@ const Toast: React.FC = () => {
           key={toast.id}
           className={`border-l-4 border-${typeColors[toast.type]} flex items-center justify-between gap-4 px-5 py-3 rounded-lg shadow-lg ${typeColors[toast.type]} animate-notification-fade-in`}
         >
-          <span className="text-xs">{toast.message}</span>
+          <span className="text-xs md:text-md">{toast.message}</span>
           <button onClick={() => removeToast(toast.id)}>
             <X className="w-4 h-4" />
           </button>

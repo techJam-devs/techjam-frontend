@@ -121,7 +121,8 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
         {/* Banner */}
         <div
           className="relative h-28 md:h-40 w-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${profileBanner})` }}>
+          style={{ backgroundImage: `url(${profileBanner})` }}
+        >
           {/* Close */}
           <button
             onClick={onClose}
@@ -138,8 +139,9 @@ const ProfileSettingsPage = ({ show, onClose }: ProfileSettingsModalProps) => {
               <img
                 src={avatarPreview || user.avatar}
                 alt="avatar"
-                className={`w-full h-full object-cover ${isUploadingAvatar ? "opacity-70" : ""
-                  }`}
+                className={`w-full h-full object-cover ${
+                  isUploadingAvatar ? "opacity-70" : ""
+                }`}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-gray-700">
